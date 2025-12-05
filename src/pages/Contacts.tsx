@@ -40,7 +40,7 @@ const Contacts = () => {
     },
     {
       icon: MapPin,
-      title: "Адрес",
+      title: "Address",
       content: "Ашхабад, Туркменистан",
       link: null,
     },
