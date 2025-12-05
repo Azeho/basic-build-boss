@@ -144,6 +144,31 @@ const Home = () => {
       </section>
 
       <section className="container mx-auto px-4 py-20">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            Наши партнеры
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Мы работаем с ведущими мировыми производителями оборудования
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center">
+          {/* Placeholder vendor logos - replace with actual logos */}
+          {[1, 2, 3, 4, 5, 6].map((vendor) => (
+            <div key={vendor} className="flex items-center justify-center p-6 bg-background rounded-lg border border-border hover:shadow-md transition-all">
+              <div className="text-center">
+                <div className="w-24 h-24 bg-muted rounded-lg flex items-center justify-center mb-2">
+                  <span className="text-2xl font-bold text-muted-foreground">Logo</span>
+                </div>
+                <p className="text-sm text-muted-foreground">Vendor {vendor}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
             Готовы начать сотрудничество?
