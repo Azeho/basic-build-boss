@@ -28,7 +28,7 @@ const Contacts = () => {
   const contactInfo = [
     {
       icon: Phone,
-      title: "Телефон",
+      title: "Phone",
       content: "+993 (12) 00-00-00",
       link: "tel:+99312000000",
     },
