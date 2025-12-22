@@ -71,3 +71,57 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+## Disk Space Management Tools
+
+This repository includes disk space analysis and cleanup tools for Linux servers:
+
+### Quick Disk Check (`quick-disk-check.sh`)
+
+A fast, non-interactive script that provides an instant overview of disk usage:
+
+```bash
+chmod +x quick-disk-check.sh
+./quick-disk-check.sh
+```
+
+Shows:
+- Current disk usage across all partitions
+- Log files size and largest logs
+- Package manager caches (APT, YUM, npm, etc.)
+- Temporary files size
+- Top 10 largest directories
+- Top 10 largest files (>100MB)
+- Docker usage (if installed)
+
+### Full Disk Cleanup Tool (`disk-cleanup.sh`)
+
+An interactive menu-driven script for comprehensive analysis and cleanup:
+
+```bash
+chmod +x disk-cleanup.sh
+sudo ./disk-cleanup.sh
+```
+
+Features:
+- **Quick Analysis**: Fast overview of disk usage
+- **Full Analysis**: Detailed scan of all directories and files
+- **Interactive Cleanup**: Safe cleanup options for caches, logs, Docker, etc.
+- **Report Generation**: Creates detailed reports for record-keeping
+
+Supports:
+- OpenVZ/Virtuozzo containers (ploop devices)
+- APT/YUM/DNF package managers
+- Docker cleanup
+- Log rotation
+- Temporary files cleanup
+- And more...
+
+### Documentation
+
+See [DISK-CLEANUP-GUIDE.md](DISK-CLEANUP-GUIDE.md) for detailed documentation including:
+- What is ploop11004p1?
+- Common causes of disk space issues
+- Emergency cleanup procedures
+- Prevention strategies
+- Troubleshooting guide
