@@ -117,11 +117,37 @@ Supports:
 - Temporary files cleanup
 - And more...
 
+### cPanel Disk Cleanup Tool (`cpanel-disk-cleanup.sh`) ⭐ NEW
+
+**Specifically designed for cPanel servers** - handles common cPanel disk issues:
+
+```bash
+chmod +x cpanel-disk-cleanup.sh
+
+# Analyze mode (see what would be cleaned)
+./cpanel-disk-cleanup.sh --analyze
+
+# Interactive cleanup
+./cpanel-disk-cleanup.sh
+```
+
+Cleans:
+- **PHP error_log files** (biggest problem on cPanel servers!)
+- Apache archived logs
+- Old log archives
+- Munin monitoring logs
+- YUM cache
+- Temporary files
+
+**Real-world success:** Freed 14GB on a 97% full server → now at 68%!
+
 ### Documentation
 
-See [DISK-CLEANUP-GUIDE.md](DISK-CLEANUP-GUIDE.md) for detailed documentation including:
-- What is ploop11004p1?
-- Common causes of disk space issues
-- Emergency cleanup procedures
-- Prevention strategies
-- Troubleshooting guide
+- [DISK-CLEANUP-GUIDE.md](DISK-CLEANUP-GUIDE.md) - General Linux server cleanup guide
+- [CPANEL-CLEANUP-GUIDE.md](CPANEL-CLEANUP-GUIDE.md) - **cPanel-specific guide** with:
+  - What is ploop11004p1?
+  - Common cPanel disk issues (error_log, email, backups)
+  - Emergency cleanup procedures
+  - Prevention strategies (cron jobs, quotas)
+  - Troubleshooting guide
+  - Real-world examples
