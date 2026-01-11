@@ -11,60 +11,60 @@ import industrialImg from "@/assets/sector-industrial.jpg";
 const Industries = () => {
   const sectors = [
     {
-      title: "Гостиничный сектор",
+      title: "Hospitality Sector",
       subtitle: "Hospitality sector",
-      description: "Комплексные решения для отелей, курортов и санаториев. Системы телефонии, видеонаблюдения и контроля доступа.",
+      description: "Comprehensive solutions for hotels, resorts and sanatoriums. Telephony systems, video surveillance and access control.",
       image: hospitalityImg,
-      reference: "Дениз отель Аваза",
+      reference: "Deniz Hotel Avaza",
     },
     {
-      title: "Здравоохранение",
+      title: "Healthcare",
       subtitle: "Healthcare sector",
-      description: "Специализированные системы связи для медицинских учреждений, больниц и санаториев.",
+      description: "Specialized communication systems for medical facilities, hospitals and sanatoriums.",
       image: healthcareImg,
-      reference: "Санаторий Моллакара",
+      reference: "Mollakara Sanatorium",
     },
     {
-      title: "Государственный сектор",
+      title: "Government Sector",
       subtitle: "Government sector",
-      description: "Защищенные коммуникационные системы для государственных учреждений и министерств.",
+      description: "Secure communication systems for government agencies and ministries.",
       image: governmentImg,
-      reference: "Министерство Энергетики Туркменистана",
+      reference: "Ministry of Energy of Turkmenistan",
     },
     {
-      title: "Финансовый сектор",
+      title: "Financial Sector",
       subtitle: "Financial sector",
-      description: "Безопасные решения для банков и финансовых организаций с высокими требованиями к защите данных.",
+      description: "Secure solutions for banks and financial institutions with high data protection requirements.",
       image: financialImg,
-      reference: "Внешэконом банк Туркменистана",
+      reference: "Vnesheconombank of Turkmenistan",
     },
     {
-      title: "Образование",
+      title: "Education",
       subtitle: "Education sector",
-      description: "Современные системы для образовательных учреждений, школ и университетов.",
+      description: "Modern systems for educational institutions, schools and universities.",
       image: educationImg,
-      reference: "СОШ №56 в г. Ашгабат",
+      reference: "Secondary School No. 56 in Ashgabat",
     },
     {
-      title: "Розничная торговля",
+      title: "Retail",
       subtitle: "Retail sector",
-      description: "Комплексные решения для торговых центров, супермаркетов и оптовых баз.",
+      description: "Comprehensive solutions for shopping centers, supermarkets and wholesale warehouses.",
       image: retailImg,
-      reference: "Супермаркет «15 лет Независимости»",
+      reference: "Supermarket '15 Years of Independence'",
     },
     {
-      title: "Транспорт",
+      title: "Transport",
       subtitle: "Transport sector",
-      description: "Системы диспетчерской связи для аэропортов, вокзалов и морских портов.",
+      description: "Dispatch communication systems for airports, railway stations and seaports.",
       image: transportImg,
-      reference: "Международный морской порт Туркменбаши",
+      reference: "Turkmenbashi International Seaport",
     },
     {
-      title: "Промышленность",
+      title: "Industry",
       subtitle: "Industrial sector",
-      description: "АСУТП и системы автоматизации для промышленных предприятий и энергетики.",
+      description: "Process control systems and automation for industrial enterprises and energy sector.",
       image: industrialImg,
-      reference: "Мары ГРЭС",
+      reference: "Mary Power Plant",
     },
   ];
 
@@ -72,9 +72,9 @@ const Industries = () => {
     <div className="min-h-screen">
       <section className="bg-gradient-to-r from-primary to-secondary py-20 text-primary-foreground">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Сферы деятельности</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">Industries We Serve</h1>
           <p className="text-lg md:text-xl max-w-3xl opacity-90">
-            Реализованные проекты в различных отраслях экономики Туркменистана
+            Completed projects across various sectors of Turkmenistan's economy
           </p>
         </div>
       </section>
@@ -84,8 +84,8 @@ const Industries = () => {
           {sectors.map((sector, index) => (
             <Card key={index} className="overflow-hidden border-border hover:shadow-xl transition-all group">
               <div className="relative h-64 overflow-hidden">
-                <img 
-                  src={sector.image} 
+                <img
+                  src={sector.image}
                   alt={sector.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
@@ -106,7 +106,7 @@ const Industries = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-sm text-muted-foreground">
-                  <span className="font-semibold text-foreground">Реализованный объект:</span> {sector.reference}
+                  <span className="font-semibold text-foreground">Completed project:</span> {sector.reference}
                 </div>
               </CardContent>
             </Card>
@@ -116,23 +116,23 @@ const Industries = () => {
 
       <section className="bg-muted py-16">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">Наш опыт</h2>
+          <h2 className="text-3xl font-bold mb-6">Our Experience</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
             <div>
               <div className="text-4xl font-bold text-primary mb-2">8+</div>
-              <div className="text-sm text-muted-foreground">Отраслей</div>
+              <div className="text-sm text-muted-foreground">Industries</div>
             </div>
             <div>
               <div className="text-4xl font-bold text-primary mb-2">500+</div>
-              <div className="text-sm text-muted-foreground">Объектов</div>
+              <div className="text-sm text-muted-foreground">Projects</div>
             </div>
             <div>
               <div className="text-4xl font-bold text-primary mb-2">15+</div>
-              <div className="text-sm text-muted-foreground">Лет на рынке</div>
+              <div className="text-sm text-muted-foreground">Years in Market</div>
             </div>
             <div>
               <div className="text-4xl font-bold text-primary mb-2">100%</div>
-              <div className="text-sm text-muted-foreground">Качество</div>
+              <div className="text-sm text-muted-foreground">Quality</div>
             </div>
           </div>
         </div>

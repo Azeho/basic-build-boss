@@ -19,8 +19,8 @@ const Contacts = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast({
-      title: "Сообщение отправлено",
-      description: "Мы свяжемся с вами в ближайшее время",
+      title: "Message sent",
+      description: "We will contact you shortly",
     });
     setFormData({ name: "", email: "", phone: "", message: "" });
   };
@@ -41,13 +41,13 @@ const Contacts = () => {
     {
       icon: MapPin,
       title: "Address",
-      content: "Ашхабад, Туркменистан",
+      content: "Ashgabat, Turkmenistan",
       link: null,
     },
     {
       icon: Clock,
-      title: "Режим работы",
-      content: "Пн-Пт: 9:00 - 18:00\nСб-Вс: Выходной",
+      title: "Working Hours",
+      content: "Mon-Fri: 9:00 AM - 6:00 PM\nSat-Sun: Closed",
       link: null,
     },
   ];
@@ -56,9 +56,9 @@ const Contacts = () => {
     <div className="min-h-screen">
       <section className="bg-gradient-to-r from-primary to-secondary py-20 text-primary-foreground">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Контакты</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">Contact Us</h1>
           <p className="text-lg md:text-xl max-w-3xl opacity-90">
-            Свяжитесь с нами для консультации и получения коммерческого предложения
+            Contact us for consultation and to receive a commercial proposal
           </p>
         </div>
       </section>
@@ -66,16 +66,16 @@ const Contacts = () => {
       <section className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div>
-            <h2 className="text-3xl font-bold mb-8">Напишите нам</h2>
+            <h2 className="text-3xl font-bold mb-8">Send Us a Message</h2>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <Label htmlFor="name">Имя *</Label>
+                <Label htmlFor="name">Name *</Label>
                 <Input
                   id="name"
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="Ваше имя"
+                  placeholder="Your name"
                   className="mt-2"
                 />
               </div>
@@ -94,7 +94,7 @@ const Contacts = () => {
               </div>
 
               <div>
-                <Label htmlFor="phone">Телефон</Label>
+                <Label htmlFor="phone">Phone</Label>
                 <Input
                   id="phone"
                   type="tel"
@@ -106,26 +106,26 @@ const Contacts = () => {
               </div>
 
               <div>
-                <Label htmlFor="message">Сообщение *</Label>
+                <Label htmlFor="message">Message *</Label>
                 <Textarea
                   id="message"
                   required
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  placeholder="Опишите вашу задачу или вопрос"
+                  placeholder="Describe your project or question"
                   rows={5}
                   className="mt-2"
                 />
               </div>
 
               <Button type="submit" size="lg" className="w-full">
-                Отправить сообщение
+                Send Message
               </Button>
             </form>
           </div>
 
           <div>
-            <h2 className="text-3xl font-bold mb-8">Контактная информация</h2>
+            <h2 className="text-3xl font-bold mb-8">Contact Information</h2>
             <div className="space-y-6">
               {contactInfo.map((info, index) => (
                 <Card key={index} className="border-border">
@@ -137,7 +137,7 @@ const Contacts = () => {
                   </CardHeader>
                   <CardContent>
                     {info.link ? (
-                      <a 
+                      <a
                         href={info.link}
                         className="text-muted-foreground hover:text-primary transition-colors"
                       >
@@ -155,13 +155,13 @@ const Contacts = () => {
 
             <Card className="mt-6 border-primary bg-primary/5">
               <CardHeader>
-                <CardTitle className="text-lg">Партнер MITEL</CardTitle>
+                <CardTitle className="text-lg">MITEL Partner</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription className="mb-4">
-                  Мы являемся официальным партнером MITEL в Туркменистане
+                  We are an official MITEL partner in Turkmenistan
                 </CardDescription>
-                <a 
+                <a
                   href="https://www.mitel.com/partners/partner-locator"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -178,22 +178,22 @@ const Contacts = () => {
 
       <section className="bg-muted py-16">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">Готовы начать?</h2>
+          <h2 className="text-3xl font-bold mb-6">Ready to Get Started?</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-            Наши специалисты готовы проконсультировать вас по любым вопросам и подобрать 
-            оптимальное решение для вашего проекта
+            Our specialists are ready to consult you on any issues and select
+            the optimal solution for your project
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="tel:+99312000000">
               <Button size="lg">
                 <Phone className="mr-2 h-5 w-5" />
-                Позвонить
+                Call Us
               </Button>
             </a>
             <a href="mailto:info@sungur-electronics.com">
               <Button size="lg" variant="outline">
                 <Mail className="mr-2 h-5 w-5" />
-                Написать письмо
+                Send Email
               </Button>
             </a>
           </div>

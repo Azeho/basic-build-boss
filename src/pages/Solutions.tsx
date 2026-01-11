@@ -5,116 +5,116 @@ const Solutions = () => {
   const solutions = [
     {
       icon: Phone,
-      title: "Телефонизация предприятий",
+      title: "Enterprise Telephony",
       subtitle: "Telephonization & PABX systems",
-      description: "Проектирование, установка и настройка современных систем телефонной связи и офисных АТС",
+      description: "Design, installation and configuration of modern telephone systems and office PBX",
       features: [
-        "IP-телефония",
-        "Аналоговые и цифровые АТС",
-        "Call-центры",
-        "Интеграция с CRM",
+        "IP telephony",
+        "Analog and digital PBX",
+        "Call centers",
+        "CRM integration",
       ],
     },
     {
       icon: Network,
-      title: "Диспетчерская связь",
+      title: "Dispatch Communications",
       subtitle: "Dispatcher communications systems",
-      description: "Надежные системы диспетчерской связи для оперативного управления",
+      description: "Reliable dispatch communication systems for operational management",
       features: [
-        "Радиосвязь",
-        "Диспетчерские консоли",
-        "Системы оповещения",
-        "Запись переговоров",
+        "Radio communications",
+        "Dispatcher consoles",
+        "Notification systems",
+        "Call recording",
       ],
     },
     {
       icon: Video,
-      title: "Аудио и видеоконференцсвязь",
+      title: "Audio and Video Conferencing",
       subtitle: "Audio and video conference systems",
-      description: "Профессиональные решения для проведения конференций любого масштаба",
+      description: "Professional solutions for conferences of any scale",
       features: [
-        "HD видеоконференции",
-        "Системы совместной работы",
-        "Беспроводное подключение",
-        "Запись конференций",
+        "HD video conferencing",
+        "Collaboration systems",
+        "Wireless connectivity",
+        "Conference recording",
       ],
     },
     {
       icon: Volume2,
-      title: "Системы звукового оповещения",
+      title: "Public Address Systems",
       subtitle: "Voice announcement and PA systems",
-      description: "Системы оповещения и трансляции для любых объектов",
+      description: "Notification and broadcast systems for any facility",
       features: [
-        "Эвакуационное оповещение",
-        "Фоновая музыка",
-        "Зональное вещание",
-        "IP-трансляция",
+        "Evacuation notification",
+        "Background music",
+        "Zone broadcasting",
+        "IP broadcasting",
       ],
     },
     {
       icon: Wifi,
-      title: "Локальные сети и IT инфраструктура",
+      title: "Local Networks and IT Infrastructure",
       subtitle: "Network and IT solution",
-      description: "Проектирование и внедрение сетевой инфраструктуры предприятия",
+      description: "Design and implementation of enterprise network infrastructure",
       features: [
-        "СКС и волоконная оптика",
-        "Активное сетевое оборудование",
-        "Wi-Fi сети",
-        "Серверные решения",
+        "Structured cabling and fiber optics",
+        "Active network equipment",
+        "Wi-Fi networks",
+        "Server solutions",
       ],
     },
     {
       icon: Cog,
-      title: "Промышленная автоматизация",
+      title: "Industrial Automation",
       subtitle: "Industrial automation & SCADA systems",
-      description: "АСУТП и системы диспетчеризации технологических процессов",
+      description: "Process control systems and SCADA for technological processes",
       features: [
-        "SCADA системы",
-        "ПЛК и контроллеры",
-        "Операторские панели",
-        "Промышленные сети",
+        "SCADA systems",
+        "PLCs and controllers",
+        "Operator panels",
+        "Industrial networks",
       ],
     },
     {
       icon: Shield,
-      title: "Информационная безопасность",
+      title: "Information Security",
       subtitle: "Cybersecurity",
-      description: "Комплексная защита информационных систем и данных",
+      description: "Comprehensive protection of information systems and data",
       features: [
-        "Межсетевые экраны",
-        "Системы обнаружения вторжений",
-        "Шифрование данных",
-        "Аудит безопасности",
+        "Firewalls",
+        "Intrusion detection systems",
+        "Data encryption",
+        "Security audits",
       ],
     },
     {
       icon: Camera,
-      title: "Видеонаблюдение и контроль доступа",
+      title: "Video Surveillance and Access Control",
       subtitle: "CCTV and access control systems",
-      description: "Современные системы безопасности и контроля",
+      description: "Modern security and control systems",
       features: [
-        "IP и аналоговые камеры",
-        "Видеоаналитика",
-        "Системы СКУД",
-        "Интеграция систем",
+        "IP and analog cameras",
+        "Video analytics",
+        "Access control systems",
+        "System integration",
       ],
     },
   ];
 
   const services = [
-    "Проектирование и консультирование",
-    "Установка и пусконаладочные работы",
-    "Техническая поддержка 24/7",
-    "Сервисное обслуживание и ремонт",
+    "Design and Consulting",
+    "Installation and Commissioning",
+    "24/7 Technical Support",
+    "Service and Repair",
   ];
 
   return (
     <div className="min-h-screen">
       <section className="bg-gradient-to-r from-primary to-secondary py-20 text-primary-foreground">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Решения и услуги</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">Solutions and Services</h1>
           <p className="text-lg md:text-xl max-w-3xl opacity-90">
-            Комплексные телекоммуникационные и информационные решения для вашего бизнеса
+            Comprehensive telecommunications and information solutions for your business
           </p>
         </div>
       </section>
@@ -146,7 +146,7 @@ const Solutions = () => {
 
       <section className="bg-muted py-16">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Наши услуги</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Our Services</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.map((service, index) => (
               <Card key={index} className="text-center border-border">
@@ -159,7 +159,7 @@ const Solutions = () => {
           </div>
           <div className="text-center mt-12">
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Planning and design, consulting, installation, commissioning and start up. 
+              Planning and design, consulting, installation, commissioning and start up.
               Technical support, maintenance and repair services.
             </p>
           </div>

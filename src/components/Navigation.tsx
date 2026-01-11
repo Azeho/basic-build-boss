@@ -8,11 +8,11 @@ const Navigation = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { path: "/", label: "Главная" },
-    { path: "/solutions", label: "Решения и услуги" },
-    { path: "/industries", label: "Сферы деятельности" },
-    { path: "/about", label: "О компании" },
-    { path: "/contacts", label: "Контакты" },
+    { path: "/", label: "Home" },
+    { path: "/solutions", label: "Solutions" },
+    { path: "/industries", label: "Industries" },
+    { path: "/about", label: "About" },
+    { path: "/contacts", label: "Contacts" },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -27,7 +27,7 @@ const Navigation = () => {
             </div>
             <div className="hidden md:block">
               <div className="font-bold text-lg text-foreground">Sungur Electronics</div>
-              <div className="text-xs text-muted-foreground">Технологии для бизнеса</div>
+              <div className="text-xs text-muted-foreground">Technology for Business</div>
             </div>
           </Link>
 
@@ -55,7 +55,7 @@ const Navigation = () => {
             <a href="mailto:info@sungur-electronics.com">
               <Button variant="default" size="sm">
                 <Mail className="h-4 w-4 mr-2" />
-                Связаться
+                Contact
               </Button>
             </a>
           </div>
@@ -94,7 +94,7 @@ const Navigation = () => {
               <a href="mailto:info@sungur-electronics.com">
                 <Button variant="default" size="sm" className="w-full">
                   <Mail className="h-4 w-4 mr-2" />
-                  Связаться
+                  Contact
                 </Button>
               </a>
             </div>

@@ -19,50 +19,50 @@ const Home = () => {
   const services = [
     {
       icon: Phone,
-      title: "Телефонизация предприятий",
-      description: "Современные системы телефонной связи и АТС для бизнеса",
+      title: "Enterprise Telephony",
+      description: "Modern telephone systems and PBX solutions for business",
       color: "text-primary",
     },
     {
       icon: Network,
-      title: "Диспетчерская связь",
-      description: "Надежные системы диспетчерских коммуникаций",
+      title: "Dispatch Communications",
+      description: "Reliable dispatch communication systems",
       color: "text-secondary",
     },
     {
       icon: Video,
-      title: "Конференцсвязь",
-      description: "Аудио и видео конференц-системы высокого качества",
+      title: "Conference Systems",
+      description: "High-quality audio and video conferencing systems",
       color: "text-primary",
     },
     {
       icon: Volume2,
-      title: "Звуковое оповещение",
-      description: "Профессиональные системы PA и оповещения",
+      title: "Public Address Systems",
+      description: "Professional PA and notification systems",
       color: "text-secondary",
     },
     {
       icon: Wifi,
-      title: "IT инфраструктура",
-      description: "Локальные сети и информационные технологии",
+      title: "IT Infrastructure",
+      description: "Local networks and information technology",
       color: "text-primary",
     },
     {
       icon: Cog,
-      title: "Автоматизация",
-      description: "Промышленная автоматизация и SCADA системы",
+      title: "Automation",
+      description: "Industrial automation and SCADA systems",
       color: "text-secondary",
     },
     {
       icon: Shield,
-      title: "Информационная безопасность",
-      description: "Комплексная защита информационных систем",
+      title: "Information Security",
+      description: "Comprehensive information systems protection",
       color: "text-primary",
     },
     {
       icon: Camera,
-      title: "Видеонаблюдение",
-      description: "CCTV системы и контроль доступа",
+      title: "Video Surveillance",
+      description: "CCTV systems and access control",
       color: "text-secondary",
     },
   ];
@@ -79,21 +79,21 @@ const Home = () => {
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-2xl">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6">
-              Комплексные телекоммуникационные решения
+              Comprehensive Telecommunications Solutions
             </h1>
             <p className="text-lg md:text-xl text-primary-foreground/90 mb-8">
-              Профессиональное проектирование, установка и обслуживание систем связи и IT инфраструктуры для вашего бизнеса
+              Professional design, installation and maintenance of communication systems and IT infrastructure for your business
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/solutions">
                 <Button size="lg" variant="default" className="w-full sm:w-auto">
-                  Наши решения
+                  Our Solutions
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
               <Link to="/contacts">
                 <Button size="lg" variant="secondary" className="w-full sm:w-auto">
-                  Связаться с нами
+                  Contact Us
                 </Button>
               </Link>
             </div>
@@ -104,10 +104,10 @@ const Home = () => {
       <section className="container mx-auto px-4 py-20">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Наши решения и услуги
+            Our Solutions and Services
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Предоставляем полный спектр услуг по внедрению современных телекоммуникационных систем
+            We provide a full range of services for implementing modern telecommunications systems
           </p>
         </div>
 
@@ -128,7 +128,7 @@ const Home = () => {
         <div className="text-center mt-12">
           <Link to="/solutions">
             <Button size="lg" variant="outline">
-              Все решения
+              All Solutions
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </Link>
@@ -140,15 +140,15 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div>
               <div className="text-4xl font-bold text-primary mb-2">15+</div>
-              <div className="text-muted-foreground">Лет опыта</div>
+              <div className="text-muted-foreground">Years of Experience</div>
             </div>
             <div>
               <div className="text-4xl font-bold text-primary mb-2">500+</div>
-              <div className="text-muted-foreground">Реализованных проектов</div>
+              <div className="text-muted-foreground">Completed Projects</div>
             </div>
             <div>
               <div className="text-4xl font-bold text-primary mb-2">24/7</div>
-              <div className="text-muted-foreground">Техническая поддержка</div>
+              <div className="text-muted-foreground">Technical Support</div>
             </div>
           </div>
         </div>
@@ -157,10 +157,10 @@ const Home = () => {
       <section className="container mx-auto px-4 py-20">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Наши партнеры
+            Our Partners
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Мы работаем с ведущими мировыми производителями оборудования
+            We work with leading global equipment manufacturers
           </p>
         </div>
 
@@ -183,14 +183,14 @@ const Home = () => {
       <section className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
-            Готовы начать сотрудничество?
+            Ready to Start Working Together?
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            Свяжитесь с нами для консультации и получения коммерческого предложения
+            Contact us for consultation and to receive a commercial proposal
           </p>
           <Link to="/contacts">
             <Button size="lg">
-              Связаться с нами
+              Contact Us
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </Link>
