@@ -5,6 +5,17 @@ import { Phone, Network, Video, Volume2, Wifi, Cog, Shield, Camera, ArrowRight }
 import heroImage from "@/assets/hero-home.jpg";
 
 const Home = () => {
+  // Add your vendor logos here - upload images to src/assets/ folder
+  // Example: import ciscoLogo from "@/assets/vendor-cisco.png";
+  const vendors = [
+    { name: "Vendor 1" },
+    { name: "Vendor 2" },
+    { name: "Vendor 3" },
+    { name: "Vendor 4" },
+    { name: "Vendor 5" },
+    { name: "Vendor 6" },
+  ];
+
   const services = [
     {
       icon: Phone,
@@ -153,15 +164,16 @@ const Home = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center">
-          {/* Placeholder vendor logos - replace with actual logos */}
-          {[1, 2, 3, 4, 5, 6].map((vendor) => (
-            <div key={vendor} className="flex items-center justify-center p-6 bg-background rounded-lg border border-border hover:shadow-md transition-all">
-              <div className="text-center">
-                <div className="w-24 h-24 bg-muted rounded-lg flex items-center justify-center mb-2">
-                  <span className="text-2xl font-bold text-muted-foreground">Logo</span>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
+          {vendors.map((vendor, index) => (
+            <div
+              key={index}
+              className="w-full flex items-center justify-center p-6 bg-background rounded-lg border border-border hover:shadow-md transition-all"
+            >
+              <div className="text-center w-full">
+                <div className="w-full h-20 bg-muted rounded-lg flex items-center justify-center">
+                  <span className="text-lg font-semibold text-muted-foreground">{vendor.name}</span>
                 </div>
-                <p className="text-sm text-muted-foreground">Vendor {vendor}</p>
               </div>
             </div>
           ))}
