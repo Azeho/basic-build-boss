@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Phone, Mail, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import logoImage from "@/assets/sungur-logo.png";
 
 const Navigation = () => {
   const location = useLocation();
@@ -21,14 +22,12 @@ const Navigation = () => {
     <nav className="bg-card border-b border-border sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-3">
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-lg">
-              <div className="text-primary-foreground font-bold text-xl">SE</div>
-            </div>
-            <div className="hidden md:block">
-              <div className="font-bold text-lg text-foreground">Sungur Electronics</div>
-              <div className="text-xs text-muted-foreground">Technology for Business</div>
-            </div>
+          <Link to="/" className="flex items-center">
+            <img
+              src={logoImage}
+              alt="Sungur Electronics"
+              className="h-12 w-auto"
+            />
           </Link>
 
           <div className="hidden lg:flex items-center space-x-1">
