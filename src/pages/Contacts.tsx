@@ -3,25 +3,36 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Phone, Mail, MapPin, Clock, CheckCircle } from "lucide-react";
 import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
 
 const Contacts = () => {
-  const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     message: "",
   });
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [submittedEmail, setSubmittedEmail] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Message sent",
-      description: "We will contact you shortly",
+
+    // Track form submission with timestamp
+    console.log('Contact form submitted:', {
+      timestamp: new Date().toISOString(),
+      formData: formData,
     });
+
+    // Store email for confirmation dialog
+    setSubmittedEmail(formData.email);
+
+    // Show centered success modal
+    setShowSuccessDialog(true);
+
+    // Clear form
     setFormData({ name: "", email: "", phone: "", message: "" });
   };
 
@@ -35,8 +46,8 @@ const Contacts = () => {
     {
       icon: Mail,
       title: "Email",
-      content: "info@sungur-electronics.com",
-      link: "mailto:info@sungur-electronics.com",
+      content: "sales@sungur-electronics.com",
+      link: "mailto:sales@sungur-electronics.com",
     },
     {
       icon: MapPin,
@@ -190,7 +201,7 @@ const Contacts = () => {
                 Call Us
               </Button>
             </a>
-            <a href="mailto:info@sungur-electronics.com">
+            <a href="mailto:sales@sungur-electronics.com">
               <Button size="lg" variant="outline">
                 <Mail className="mr-2 h-5 w-5" />
                 Send Email
@@ -199,6 +210,25 @@ const Contacts = () => {
           </div>
         </div>
       </section>
+
+      <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <div className="flex justify-center mb-4">
+              <CheckCircle className="h-16 w-16 text-primary" />
+            </div>
+            <DialogTitle className="text-center text-2xl">Message Sent Successfully!</DialogTitle>
+            <DialogDescription className="text-center text-lg">
+              Thank you for contacting us. We will get back to you shortly{submittedEmail ? ` at ${submittedEmail}` : ''}.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-center mt-4">
+            <Button onClick={() => setShowSuccessDialog(false)}>
+              Close
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

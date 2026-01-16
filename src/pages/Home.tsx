@@ -8,8 +8,16 @@ import beldenLogo from "@/assets/belden.png";
 import boschLogo from "@/assets/Bosch.png";
 import panasonicLogo from "@/assets/panasonic.png";
 import schneiderLogo from "@/assets/schneider.png";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
+import { useEffect } from "react";
 
 const Home = () => {
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { loop: true, align: "start" },
+    [Autoplay({ delay: 3000, stopOnInteraction: false })]
+  );
+
   const vendors = [
     { name: "Siemens", logo: siemensLogo },
     { name: "Belden", logo: beldenLogo },
@@ -166,19 +174,23 @@ const Home = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 items-center justify-items-center">
-          {vendors.map((vendor, index) => (
-            <div
-              key={index}
-              className="w-full flex items-center justify-center p-6 bg-background rounded-lg border border-border hover:shadow-md transition-all"
-            >
-              <img
-                src={vendor.logo}
-                alt={vendor.name}
-                className="w-32 h-20 object-contain grayscale hover:grayscale-0 transition-all"
-              />
-            </div>
-          ))}
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="flex gap-8">
+            {vendors.map((vendor, index) => (
+              <div
+                key={index}
+                className="flex-[0_0_40%] md:flex-[0_0_25%] lg:flex-[0_0_20%] min-w-0"
+              >
+                <div className="flex items-center justify-center p-6 bg-background rounded-lg border border-border hover:shadow-md transition-all h-32">
+                  <img
+                    src={vendor.logo}
+                    alt={vendor.name}
+                    className="w-full h-20 object-contain grayscale hover:grayscale-0 transition-all"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
