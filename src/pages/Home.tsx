@@ -3,17 +3,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Phone, Network, Video, Volume2, Wifi, Cog, Shield, Camera, ArrowRight } from "lucide-react";
 import heroImage from "@/assets/hero-home.jpg";
+import siemensLogo from "@/assets/siemens.png";
+import beldenLogo from "@/assets/belden.png";
+import boschLogo from "@/assets/Bosch.png";
+import panasonicLogo from "@/assets/panasonic.png";
+import schneiderLogo from "@/assets/schneider.png";
 
 const Home = () => {
-  // Add your vendor logos here - upload images to src/assets/ folder
-  // Example: import ciscoLogo from "@/assets/vendor-cisco.png";
   const vendors = [
-    { name: "Vendor 1" },
-    { name: "Vendor 2" },
-    { name: "Vendor 3" },
-    { name: "Vendor 4" },
-    { name: "Vendor 5" },
-    { name: "Vendor 6" },
+    { name: "Siemens", logo: siemensLogo },
+    { name: "Belden", logo: beldenLogo },
+    { name: "Bosch", logo: boschLogo },
+    { name: "Panasonic", logo: panasonicLogo },
+    { name: "Schneider Electric", logo: schneiderLogo },
   ];
 
   const services = [
@@ -164,17 +166,17 @@ const Home = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 items-center justify-items-center">
           {vendors.map((vendor, index) => (
             <div
               key={index}
               className="w-full flex items-center justify-center p-6 bg-background rounded-lg border border-border hover:shadow-md transition-all"
             >
-              <div className="text-center w-full">
-                <div className="w-full h-20 bg-muted rounded-lg flex items-center justify-center">
-                  <span className="text-lg font-semibold text-muted-foreground">{vendor.name}</span>
-                </div>
-              </div>
+              <img
+                src={vendor.logo}
+                alt={vendor.name}
+                className="w-32 h-20 object-contain grayscale hover:grayscale-0 transition-all"
+              />
             </div>
           ))}
         </div>

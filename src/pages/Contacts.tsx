@@ -29,8 +29,8 @@ const Contacts = () => {
     {
       icon: Phone,
       title: "Phone",
-      content: "+993 (12) 00-00-00",
-      link: "tel:+99312000000",
+      content: "+993 12 97-43-33",
+      link: "tel:+993129743-33",
     },
     {
       icon: Mail,
@@ -100,7 +100,7 @@ const Contacts = () => {
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  placeholder="+993 (12) 00-00-00"
+                  placeholder="+993 12 97-43-33"
                   className="mt-2"
                 />
               </div>
@@ -184,7 +184,7 @@ const Contacts = () => {
             the optimal solution for your project
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="tel:+99312000000">
+            <a href="tel:+993129743-33">
               <Button size="lg">
                 <Phone className="mr-2 h-5 w-5" />
                 Call Us

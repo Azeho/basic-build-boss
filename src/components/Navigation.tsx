@@ -47,9 +47,9 @@ const Navigation = () => {
           </div>
 
           <div className="hidden lg:flex items-center space-x-4">
-            <a href="tel:+99312000000" className="flex items-center space-x-2 text-sm text-muted-foreground hover:text-primary transition-colors">
+            <a href="tel:+993129743-33" className="flex items-center space-x-2 text-sm text-muted-foreground hover:text-primary transition-colors">
               <Phone className="h-4 w-4" />
-              <span>+993 (12) 00-00-00</span>
+              <span>+993 12 97-43-33</span>
             </a>
             <a href="mailto:info@sungur-electronics.com">
               <Button variant="default" size="sm">
@@ -86,9 +86,9 @@ const Navigation = () => {
               </Link>
             ))}
             <div className="px-4 pt-4 space-y-3 border-t border-border mt-4">
-              <a href="tel:+99312000000" className="flex items-center space-x-2 text-sm text-muted-foreground">
+              <a href="tel:+993129743-33" className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <Phone className="h-4 w-4" />
-                <span>+993 (12) 00-00-00</span>
+                <span>+993 12 97-43-33</span>
               </a>
               <a href="mailto:info@sungur-electronics.com">
                 <Button variant="default" size="sm" className="w-full">
