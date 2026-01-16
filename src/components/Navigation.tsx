@@ -51,7 +51,7 @@ const Navigation = () => {
               <Phone className="h-4 w-4" />
               <span>+993 12 97-43-33</span>
             </a>
-            <a href="mailto:sales@sungur-electronics.com">
+            <a href="mailto:info@sungur-electronics.com">
               <Button variant="default" size="sm">
                 <Mail className="h-4 w-4 mr-2" />
                 Contact
@@ -90,7 +90,7 @@ const Navigation = () => {
                 <Phone className="h-4 w-4" />
                 <span>+993 12 97-43-33</span>
               </a>
-              <a href="mailto:sales@sungur-electronics.com">
+              <a href="mailto:info@sungur-electronics.com">
                 <Button variant="default" size="sm" className="w-full">
                   <Mail className="h-4 w-4 mr-2" />
                   Contact

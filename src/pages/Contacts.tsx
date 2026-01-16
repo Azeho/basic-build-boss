@@ -46,8 +46,8 @@ const Contacts = () => {
     {
       icon: Mail,
       title: "Email",
-      content: "sales@sungur-electronics.com",
-      link: "mailto:sales@sungur-electronics.com",
+      content: "info@sungur-electronics.com",
+      link: "mailto:info@sungur-electronics.com",
     },
     {
       icon: MapPin,
@@ -201,7 +201,7 @@ const Contacts = () => {
                 Call Us
               </Button>
             </a>
-            <a href="mailto:sales@sungur-electronics.com">
+            <a href="mailto:info@sungur-electronics.com">
               <Button size="lg" variant="outline">
                 <Mail className="mr-2 h-5 w-5" />
                 Send Email

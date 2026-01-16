@@ -55,8 +55,8 @@ const Footer = () => {
               </li>
               <li className="flex items-start space-x-2 text-sm">
                 <Mail className="h-4 w-4 mt-0.5 text-primary shrink-0" />
-                <a href="mailto:sales@sungur-electronics.com" className="text-muted-foreground hover:text-primary transition-colors break-all">
-                  sales@sungur-electronics.com
+                <a href="mailto:info@sungur-electronics.com" className="text-muted-foreground hover:text-primary transition-colors break-all">
+                  info@sungur-electronics.com
                 </a>
               </li>
               <li className="flex items-start space-x-2 text-sm">
