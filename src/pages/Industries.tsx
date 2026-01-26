@@ -36,7 +36,7 @@ const Industries = () => {
       subtitle: "Financial sector",
       description: "Secure solutions for banks and financial institutions with high data protection requirements.",
       image: financialImg,
-      reference: "Vnesheconombank of Turkmenistan",
+      reference: "The State Bank for Foreign Economic Affairs of Turkmenistan",
     },
     {
       title: "Education",

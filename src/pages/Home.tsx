@@ -4,10 +4,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Phone, Network, Video, Volume2, Wifi, Cog, Shield, Camera, ArrowRight } from "lucide-react";
 import heroImage from "@/assets/hero-home.jpg";
 import siemensLogo from "@/assets/siemens.png";
-import beldenLogo from "@/assets/belden.png";
 import boschLogo from "@/assets/Bosch.png";
-import panasonicLogo from "@/assets/panasonic.png";
+import panasonicLogo from "@/assets/Panasonic-Logo.jpg";
 import schneiderLogo from "@/assets/schneider.png";
+import mitelLogo from "@/assets/mitel.jpg";
+import alcatelLogo from "@/assets/alcatel.jpg";
+import hpLogo from "@/assets/hp.jpg";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { useEffect } from "react";
@@ -19,11 +21,13 @@ const Home = () => {
   );
 
   const vendors = [
-    { name: "Siemens", logo: siemensLogo },
-    { name: "Belden", logo: beldenLogo },
     { name: "Bosch", logo: boschLogo },
+    { name: "Mitel", logo: mitelLogo },
     { name: "Panasonic", logo: panasonicLogo },
+    { name: "Alcatel", logo: alcatelLogo },
+    { name: "HP", logo: hpLogo },
     { name: "Schneider Electric", logo: schneiderLogo },
+    { name: "Siemens", logo: siemensLogo },
   ];
 
   const services = [
@@ -32,48 +36,56 @@ const Home = () => {
       title: "Enterprise Telephony",
       description: "Modern telephone systems and PBX solutions for business",
       color: "text-primary",
+      image: "/placeholder.svg?height=200&width=400&text=Enterprise+Telephony",
     },
     {
       icon: Network,
       title: "Dispatch Communications",
       description: "Reliable dispatch communication systems",
       color: "text-secondary",
+      image: "/placeholder.svg?height=200&width=400&text=Dispatch+Communications",
     },
     {
       icon: Video,
       title: "Conference Systems",
       description: "High-quality audio and video conferencing systems",
       color: "text-primary",
+      image: "/placeholder.svg?height=200&width=400&text=Conference+Systems",
     },
     {
       icon: Volume2,
       title: "Public Address Systems",
       description: "Professional PA and notification systems",
       color: "text-secondary",
+      image: "/placeholder.svg?height=200&width=400&text=Public+Address+Systems",
     },
     {
       icon: Wifi,
       title: "IT Infrastructure",
       description: "Local networks and information technology",
       color: "text-primary",
+      image: "/placeholder.svg?height=200&width=400&text=IT+Infrastructure",
     },
     {
       icon: Cog,
       title: "Automation",
       description: "Industrial automation and SCADA systems",
       color: "text-secondary",
+      image: "/placeholder.svg?height=200&width=400&text=Automation",
     },
     {
       icon: Shield,
       title: "Information Security",
       description: "Comprehensive information systems protection",
       color: "text-primary",
+      image: "/placeholder.svg?height=200&width=400&text=Information+Security",
     },
     {
       icon: Camera,
       title: "Video Surveillance",
       description: "CCTV systems and access control",
       color: "text-secondary",
+      image: "/placeholder.svg?height=200&width=400&text=Video+Surveillance",
     },
   ];
 
@@ -112,6 +124,31 @@ const Home = () => {
       </section>
 
       <section className="container mx-auto px-4 py-20">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">About Us</h2>
+          <div className="space-y-4 text-muted-foreground text-lg">
+            <p>
+              <span className="font-semibold text-foreground">Sungur Electronics</span> is a
+              leading systems integrator in telecommunications technologies and information systems
+              in Turkmenistan.
+            </p>
+            <p>
+              Since our founding, we have implemented hundreds of projects of varying complexity for government
+              agencies, financial organizations, industrial enterprises and commercial companies.
+            </p>
+          </div>
+          <div className="mt-6">
+            <Link to="/about">
+              <Button variant="outline" size="lg">
+                Read more
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="container mx-auto px-4 py-20 bg-muted">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             Our Solutions and Services
@@ -123,7 +160,14 @@ const Home = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service, index) => (
-            <Card key={index} className="hover:shadow-lg transition-all border-border">
+            <Card key={index} className="hover:shadow-lg transition-all border-border overflow-hidden">
+              <div className="relative h-40 bg-muted">
+                <img
+                  src={service.image}
+                  alt={service.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <CardHeader>
                 <service.icon className={`h-12 w-12 ${service.color} mb-4`} />
                 <CardTitle className="text-lg">{service.title}</CardTitle>
