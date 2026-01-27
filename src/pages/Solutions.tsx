@@ -1,19 +1,19 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Phone, Network, Video, Cog, Shield, Camera } from "lucide-react";
+import { Phone, Network, Video, Cog, Shield, Camera, Radio, Volume2, Wrench } from "lucide-react";
 
 const Solutions = () => {
   const solutions = [
     {
       icon: Phone,
       title: "Telephonization & PABX systems",
-      description: "PABX systems Mitel (Unify), Alcatel, Panasonic. UC Platforms, Contact Center, Desktop & Cordless Devices, Voice recording systems, Billing systems",
+      description: "PABX systems Mitel (Unify), Alcatel, Panasonic. UC Platforms, Contact Center, Desktop & Cordless Devices, Collaboration, Voice recording systems, Billing systems",
       color: "text-primary",
       image: "/placeholder.svg?height=200&width=400&text=PABX+Systems",
     },
     {
       icon: Network,
       title: "Network and IT solution",
-      description: "Data center equipment, Network Infrastructure, Network Management, Monitoring and Security, Cloud Integration (SD-WAN and NaaS), Redundancy and High Availability",
+      description: "Data center equipment (IT Racks, Servers, Power (UPS) and Cooling (HVAC)), Network Infrastructure (Hardware & Software), Network Management, Monitoring and Security, Cloud Integration (SD-WAN and NaaS), Redundancy and High Availability",
       color: "text-secondary",
       image: "/placeholder.svg?height=200&width=400&text=Network+IT",
     },
@@ -44,6 +44,27 @@ const Solutions = () => {
       description: "Video surveillance systems (CCTV), Intelligent video analytics (IVA) & video content analysis (VCA), Access control systems, Video wall systems",
       color: "text-secondary",
       image: "/placeholder.svg?height=200&width=400&text=CCTV+Access",
+    },
+    {
+      icon: Radio,
+      title: "Dispatcher communications systems",
+      description: "OpenScape Xpert Mitel (Unify), OpenScape Alarm Response OScAR Mitel (Unify)",
+      color: "text-primary",
+      image: "/placeholder.svg?height=200&width=400&text=Dispatcher+Systems",
+    },
+    {
+      icon: Wrench,
+      title: "Services",
+      description: "Planning, Design and Consulting, Installation, Commissioning and Start up, Technical support and maintenance",
+      color: "text-secondary",
+      image: "/placeholder.svg?height=200&width=400&text=Services",
+    },
+    {
+      icon: Volume2,
+      title: "Voice announcement and PA systems",
+      description: "Public Address (PA) systems BOSCH, Electro-Voice, Sennheiser, Dynacord, TOA, Inter-M",
+      color: "text-primary",
+      image: "/placeholder.svg?height=200&width=400&text=PA+Systems",
     },
   ];
 
