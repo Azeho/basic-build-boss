@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Target, Users, Award, TrendingUp, CheckCircle } from "lucide-react";
+import { Target, Users, Award, TrendingUp, CheckCircle, FileEdit, Settings, Wrench } from "lucide-react";
 import aboutHeroImg from "@/assets/about-hero.jpg";
 
 const About = () => {
@@ -35,6 +35,39 @@ const About = () => {
     "Warranty on all completed work",
   ];
 
+  const services = [
+    {
+      icon: FileEdit,
+      title: "Planning & Design & Consulting",
+      description: [
+        "Developing technical solutions in alignment with customer requirements and project budget. Preparing design and estimate documentation.",
+        "Project planning and scheduling, including timelines and implementation deadlines.",
+        "Consulting on equipment and material procurement tailored to specific project needs.",
+        "Managing the full project lifecycle from start to finish: from planning and resource allocation to final delivery."
+      ]
+    },
+    {
+      icon: Settings,
+      title: "Installation & Commissioning & Start up",
+      description: [
+        "Execution of installation and cabling works. Testing, verification, and labeling of all system components.",
+        "Equipment commissioning and start-up operations.",
+        "Construction of structured cabling networks, data transmission systems, and telephone communications.",
+        "Dispatching, telemetry, and automation. Sound notification systems, video surveillance, and access control."
+      ]
+    },
+    {
+      icon: Wrench,
+      title: "Technical support & maintenance",
+      description: [
+        "Technical project support and equipment installation supervision. We provide technical support throughout the entire project lifecycle or the manufacturer's warranty period.",
+        "Maintenance and repair services, including preventive equipment maintenance.",
+        "Comprehensive system maintenance, diagnostics, and troubleshooting.",
+        "Integration of legacy equipment with modern systems."
+      ]
+    }
+  ];
+
   return (
     <div className="min-h-screen">
       <section className="bg-gradient-to-r from-primary to-secondary py-20 text-primary-foreground">
@@ -61,17 +94,16 @@ const About = () => {
             </h2>
             <div className="space-y-4 text-muted-foreground">
               <p>
-                <span className="font-semibold text-foreground">Sungur Electronics</span> is a
-                leading systems integrator in telecommunications technologies and information systems
-                in Turkmenistan.
+                <span className="font-semibold text-foreground">Sungur Electronics</span> is a company specializing in the development and implementation of system solutions in modern information technology (transmission, control, storage, and processing of information), communications systems, and security in the Turkmen market since 2010. Depending on the development needs of the customer's enterprise, we develop and implement turnkey custom systems or adapt existing solutions to specific conditions.
               </p>
               <p>
-                Since our founding, we have implemented hundreds of projects of varying complexity for government
-                agencies, financial organizations, industrial enterprises and commercial companies.
+                Sungur Electronics strives to be an innovative company focused on the needs and objectives of our clients. Our core business has always been and remains systems integration. We offer our clients a full range of IT and automation services, from strategy development to implementation, deployment, support, and maintenance.
               </p>
               <p>
-                Our mission is to provide clients with reliable, modern and cost-effective solutions
-                that contribute to their business development and operational efficiency.
+                Our team of professional consultants and technical specialists is our core asset. All our technical specialists regularly undergo training abroad. Their high level of professionalism is confirmed by numerous certificates and diplomas from leading global manufacturers and, most importantly, by successfully completed projects.
+              </p>
+              <p>
+                Sungur Electronics is focused on building long-term, professional partnerships with our clients. For us, partnerships are about mutual benefit and development. We strive to be an innovative company focused on the needs and objectives of our clients.
               </p>
             </div>
           </div>
@@ -79,6 +111,29 @@ const About = () => {
       </section>
 
       <section className="bg-muted py-16">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12 text-foreground">Our Services</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {services.map((service, index) => (
+              <Card key={index} className="border-border hover:shadow-lg transition-all">
+                <CardHeader>
+                  <service.icon className="h-12 w-12 text-primary mb-4" />
+                  <CardTitle className="text-lg">{service.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-3 text-sm text-muted-foreground">
+                    {service.description.map((item, idx) => (
+                      <li key={idx}>{item}</li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-background py-16">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">Our Values</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
