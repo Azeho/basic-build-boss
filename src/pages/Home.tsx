@@ -10,6 +10,12 @@ import schneiderLogo from "@/assets/schneider.png";
 import mitelLogo from "@/assets/mitel.jpg";
 import alcatelLogo from "@/assets/alcatel.jpg";
 import hpLogo from "@/assets/hp.jpg";
+import pabxImg from "@/assets/pabx.jpg";
+import networkImg from "@/assets/network.jpg";
+import scadaImg from "@/assets/scada.jpg";
+import audioImg from "@/assets/audio.jpg";
+import cyberImg from "@/assets/cyber.png";
+import cctvImg from "@/assets/cctv.jpg";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { useEffect } from "react";
@@ -36,42 +42,42 @@ const Home = () => {
       title: "Telephonization & PABX systems",
       description: "PABX systems Mitel (Unify), Alcatel, Panasonic. UC Platforms, Contact Center, Desktop & Cordless Devices, Voice recording systems, Billing systems",
       color: "text-primary",
-      image: "/placeholder.svg?height=200&width=400&text=PABX+Systems",
+      image: pabxImg,
     },
     {
       icon: Network,
       title: "Network and IT solution",
       description: "Data center equipment, Network Infrastructure, Network Management, Monitoring and Security, Cloud Integration (SD-WAN and NaaS), Redundancy and High Availability",
       color: "text-secondary",
-      image: "/placeholder.svg?height=200&width=400&text=Network+IT",
+      image: networkImg,
     },
     {
       icon: Cog,
       title: "Industrial automation & SCADA systems",
       description: "Automated Process Control Systems (APCS) and SCADA systems: Monitoring and regulation, Quality control, Efficiency optimization, Safety and protection, Data management",
       color: "text-primary",
-      image: "/placeholder.svg?height=200&width=400&text=SCADA+Systems",
+      image: scadaImg,
     },
     {
       icon: Video,
       title: "Audio and video conference systems",
       description: "Professional audio-conferencing systems, Professional video-conferencing systems, Virtual conferencing systems, Simultaneous translation systems",
       color: "text-secondary",
-      image: "/placeholder.svg?height=200&width=400&text=Conference+Systems",
+      image: audioImg,
     },
     {
       icon: Shield,
       title: "Cybersecurity",
       description: "IDS (Intrusion Detection System), IPS (Intrusion Prevention System), Firewall systems (Fortinet, Juniper, Netgate), Session Border Controller (SBC), Encryption data and voice",
       color: "text-primary",
-      image: "/placeholder.svg?height=200&width=400&text=Cybersecurity",
+      image: cyberImg,
     },
     {
       icon: Camera,
       title: "CCTV and access control systems",
       description: "Video surveillance systems (CCTV), Intelligent video analytics (IVA) & video content analysis (VCA), Access control systems, Video wall systems",
       color: "text-secondary",
-      image: "/placeholder.svg?height=200&width=400&text=CCTV+Access",
+      image: cctvImg,
     },
   ];
 
