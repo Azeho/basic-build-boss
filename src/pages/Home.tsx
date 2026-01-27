@@ -33,59 +33,45 @@ const Home = () => {
   const services = [
     {
       icon: Phone,
-      title: "Enterprise Telephony",
-      description: "Modern telephone systems and PBX solutions for business",
+      title: "Telephonization & PABX systems",
+      description: "PABX systems Mitel (Unify), Alcatel, Panasonic. UC Platforms, Contact Center, Desktop & Cordless Devices, Voice recording systems, Billing systems",
       color: "text-primary",
-      image: "/placeholder.svg?height=200&width=400&text=Enterprise+Telephony",
+      image: "/placeholder.svg?height=200&width=400&text=PABX+Systems",
     },
     {
       icon: Network,
-      title: "Dispatch Communications",
-      description: "Reliable dispatch communication systems",
+      title: "Network and IT solution",
+      description: "Data center equipment, Network Infrastructure, Network Management, Monitoring and Security, Cloud Integration (SD-WAN and NaaS), Redundancy and High Availability",
       color: "text-secondary",
-      image: "/placeholder.svg?height=200&width=400&text=Dispatch+Communications",
-    },
-    {
-      icon: Video,
-      title: "Conference Systems",
-      description: "High-quality audio and video conferencing systems",
-      color: "text-primary",
-      image: "/placeholder.svg?height=200&width=400&text=Conference+Systems",
-    },
-    {
-      icon: Volume2,
-      title: "Public Address Systems",
-      description: "Professional PA and notification systems",
-      color: "text-secondary",
-      image: "/placeholder.svg?height=200&width=400&text=Public+Address+Systems",
-    },
-    {
-      icon: Wifi,
-      title: "IT Infrastructure",
-      description: "Local networks and information technology",
-      color: "text-primary",
-      image: "/placeholder.svg?height=200&width=400&text=IT+Infrastructure",
+      image: "/placeholder.svg?height=200&width=400&text=Network+IT",
     },
     {
       icon: Cog,
-      title: "Automation",
-      description: "Industrial automation and SCADA systems",
+      title: "Industrial automation & SCADA systems",
+      description: "Automated Process Control Systems (APCS) and SCADA systems: Monitoring and regulation, Quality control, Efficiency optimization, Safety and protection, Data management",
+      color: "text-primary",
+      image: "/placeholder.svg?height=200&width=400&text=SCADA+Systems",
+    },
+    {
+      icon: Video,
+      title: "Audio and video conference systems",
+      description: "Professional audio-conferencing systems, Professional video-conferencing systems, Virtual conferencing systems, Simultaneous translation systems",
       color: "text-secondary",
-      image: "/placeholder.svg?height=200&width=400&text=Automation",
+      image: "/placeholder.svg?height=200&width=400&text=Conference+Systems",
     },
     {
       icon: Shield,
-      title: "Information Security",
-      description: "Comprehensive information systems protection",
+      title: "Cybersecurity",
+      description: "IDS (Intrusion Detection System), IPS (Intrusion Prevention System), Firewall systems (Fortinet, Juniper, Netgate), Session Border Controller (SBC), Encryption data and voice",
       color: "text-primary",
-      image: "/placeholder.svg?height=200&width=400&text=Information+Security",
+      image: "/placeholder.svg?height=200&width=400&text=Cybersecurity",
     },
     {
       icon: Camera,
-      title: "Video Surveillance",
-      description: "CCTV systems and access control",
+      title: "CCTV and access control systems",
+      description: "Video surveillance systems (CCTV), Intelligent video analytics (IVA) & video content analysis (VCA), Access control systems, Video wall systems",
       color: "text-secondary",
-      image: "/placeholder.svg?height=200&width=400&text=Video+Surveillance",
+      image: "/placeholder.svg?height=200&width=400&text=CCTV+Access",
     },
   ];
 
@@ -128,13 +114,10 @@ const Home = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">About Us</h2>
           <div className="space-y-4 text-muted-foreground text-lg">
             <p>
-              <span className="font-semibold text-foreground">Sungur Electronics</span> is a
-              leading systems integrator in telecommunications technologies and information systems
-              in Turkmenistan.
+              <span className="font-semibold text-foreground">Sungur Electronics</span> company is specialized in the field of development and application of system solutions with regard to modern information technologies (transmission facilities, information management, storage and processing) communication and security systems at the market of Turkmenistan starting from 2010.
             </p>
             <p>
-              Since our founding, we have implemented hundreds of projects of varying complexity for government
-              agencies, financial organizations, industrial enterprises and commercial companies.
+              Our core asset is a team of professional advisors and technical experts. All our technical specialists regularly undergo training abroad. Operational excellence of our staff is confirmed by numerous certificates and diplomas of leading worldwide manufacturers and, which is most important, by successfully implemented projects.
             </p>
           </div>
           <div className="mt-6">
@@ -158,7 +141,7 @@ const Home = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, index) => (
             <Card key={index} className="hover:shadow-lg transition-all border-border overflow-hidden">
               <div className="relative h-40 bg-muted">
