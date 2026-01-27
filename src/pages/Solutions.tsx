@@ -1,5 +1,13 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Phone, Network, Video, Cog, Shield, Camera, Radio, Volume2, Wrench } from "lucide-react";
+import pabxImg from "@/assets/pabx.jpg";
+import networkImg from "@/assets/network.jpg";
+import scadaImg from "@/assets/scada.jpg";
+import audioImg from "@/assets/audio.jpg";
+import cyberImg from "@/assets/cyber.png";
+import cctvImg from "@/assets/cctv.jpg";
+import techsImg from "@/assets/techs.jpg";
+import systemsImg from "@/assets/systems.jpg";
 
 const Solutions = () => {
   const solutions = [
@@ -8,63 +16,63 @@ const Solutions = () => {
       title: "Telephonization & PABX systems",
       description: "PABX systems Mitel (Unify), Alcatel, Panasonic. UC Platforms, Contact Center, Desktop & Cordless Devices, Collaboration, Voice recording systems, Billing systems",
       color: "text-primary",
-      image: "/placeholder.svg?height=200&width=400&text=PABX+Systems",
+      image: pabxImg,
     },
     {
       icon: Network,
       title: "Network and IT solution",
       description: "Data center equipment (IT Racks, Servers, Power (UPS) and Cooling (HVAC)), Network Infrastructure (Hardware & Software), Network Management, Monitoring and Security, Cloud Integration (SD-WAN and NaaS), Redundancy and High Availability",
       color: "text-secondary",
-      image: "/placeholder.svg?height=200&width=400&text=Network+IT",
+      image: networkImg,
     },
     {
       icon: Cog,
       title: "Industrial automation & SCADA systems",
       description: "Automated Process Control Systems (APCS) and SCADA systems: Monitoring and regulation, Quality control, Efficiency optimization, Safety and protection, Data management",
       color: "text-primary",
-      image: "/placeholder.svg?height=200&width=400&text=SCADA+Systems",
+      image: scadaImg,
     },
     {
       icon: Video,
       title: "Audio and video conference systems",
       description: "Professional audio-conferencing systems, Professional video-conferencing systems, Virtual conferencing systems, Simultaneous translation systems",
       color: "text-secondary",
-      image: "/placeholder.svg?height=200&width=400&text=Conference+Systems",
+      image: audioImg,
     },
     {
       icon: Shield,
       title: "Cybersecurity",
       description: "IDS (Intrusion Detection System), IPS (Intrusion Prevention System), Firewall systems (Fortinet, Juniper, Netgate), Session Border Controller (SBC), Encryption data and voice",
       color: "text-primary",
-      image: "/placeholder.svg?height=200&width=400&text=Cybersecurity",
+      image: cyberImg,
     },
     {
       icon: Camera,
       title: "CCTV and access control systems",
       description: "Video surveillance systems (CCTV), Intelligent video analytics (IVA) & video content analysis (VCA), Access control systems, Video wall systems",
       color: "text-secondary",
-      image: "/placeholder.svg?height=200&width=400&text=CCTV+Access",
+      image: cctvImg,
     },
     {
       icon: Radio,
       title: "Dispatcher communications systems",
       description: "OpenScape Xpert Mitel (Unify), OpenScape Alarm Response OScAR Mitel (Unify)",
       color: "text-primary",
-      image: "/placeholder.svg?height=200&width=400&text=Dispatcher+Systems",
+      image: audioImg,
     },
     {
       icon: Wrench,
       title: "Services",
       description: "Planning, Design and Consulting, Installation, Commissioning and Start up, Technical support and maintenance",
       color: "text-secondary",
-      image: "/placeholder.svg?height=200&width=400&text=Services",
+      image: techsImg,
     },
     {
       icon: Volume2,
       title: "Voice announcement and PA systems",
       description: "Public Address (PA) systems BOSCH, Electro-Voice, Sennheiser, Dynacord, TOA, Inter-M",
       color: "text-primary",
-      image: "/placeholder.svg?height=200&width=400&text=PA+Systems",
+      image: systemsImg,
     },
   ];
 
