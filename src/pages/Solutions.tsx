@@ -1,111 +1,50 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Phone, Network, Video, Volume2, Wifi, Cog, Shield, Camera, CheckCircle } from "lucide-react";
+import { Phone, Network, Video, Cog, Shield, Camera } from "lucide-react";
 
 const Solutions = () => {
   const solutions = [
     {
       icon: Phone,
-      title: "Enterprise Telephony",
-      subtitle: "Telephonization & PABX systems",
-      description: "Design, installation and configuration of modern telephone systems and office PBX",
-      features: [
-        "IP telephony",
-        "Analog and digital PBX",
-        "Call centers",
-        "CRM integration",
-      ],
+      title: "Telephonization & PABX systems",
+      description: "PABX systems Mitel (Unify), Alcatel, Panasonic. UC Platforms, Contact Center, Desktop & Cordless Devices, Voice recording systems, Billing systems",
+      color: "text-primary",
+      image: "/placeholder.svg?height=200&width=400&text=PABX+Systems",
     },
     {
       icon: Network,
-      title: "Dispatch Communications",
-      subtitle: "Dispatcher communications systems",
-      description: "Reliable dispatch communication systems for operational management",
-      features: [
-        "Radio communications",
-        "Dispatcher consoles",
-        "Notification systems",
-        "Call recording",
-      ],
-    },
-    {
-      icon: Video,
-      title: "Audio and Video Conferencing",
-      subtitle: "Audio and video conference systems",
-      description: "Professional solutions for conferences of any scale",
-      features: [
-        "HD video conferencing",
-        "Collaboration systems",
-        "Wireless connectivity",
-        "Conference recording",
-      ],
-    },
-    {
-      icon: Volume2,
-      title: "Public Address Systems",
-      subtitle: "Voice announcement and PA systems",
-      description: "Notification and broadcast systems for any facility",
-      features: [
-        "Evacuation notification",
-        "Background music",
-        "Zone broadcasting",
-        "IP broadcasting",
-      ],
-    },
-    {
-      icon: Wifi,
-      title: "Local Networks and IT Infrastructure",
-      subtitle: "Network and IT solution",
-      description: "Design and implementation of enterprise network infrastructure",
-      features: [
-        "Structured cabling and fiber optics",
-        "Active network equipment",
-        "Wi-Fi networks",
-        "Server solutions",
-      ],
+      title: "Network and IT solution",
+      description: "Data center equipment, Network Infrastructure, Network Management, Monitoring and Security, Cloud Integration (SD-WAN and NaaS), Redundancy and High Availability",
+      color: "text-secondary",
+      image: "/placeholder.svg?height=200&width=400&text=Network+IT",
     },
     {
       icon: Cog,
-      title: "Industrial Automation",
-      subtitle: "Industrial automation & SCADA systems",
-      description: "Process control systems and SCADA for technological processes",
-      features: [
-        "SCADA systems",
-        "PLCs and controllers",
-        "Operator panels",
-        "Industrial networks",
-      ],
+      title: "Industrial automation & SCADA systems",
+      description: "Automated Process Control Systems (APCS) and SCADA systems: Monitoring and regulation, Quality control, Efficiency optimization, Safety and protection, Data management",
+      color: "text-primary",
+      image: "/placeholder.svg?height=200&width=400&text=SCADA+Systems",
+    },
+    {
+      icon: Video,
+      title: "Audio and video conference systems",
+      description: "Professional audio-conferencing systems, Professional video-conferencing systems, Virtual conferencing systems, Simultaneous translation systems",
+      color: "text-secondary",
+      image: "/placeholder.svg?height=200&width=400&text=Conference+Systems",
     },
     {
       icon: Shield,
-      title: "Information Security",
-      subtitle: "Cybersecurity",
-      description: "Comprehensive protection of information systems and data",
-      features: [
-        "Firewalls",
-        "Intrusion detection systems",
-        "Data encryption",
-        "Security audits",
-      ],
+      title: "Cybersecurity",
+      description: "IDS (Intrusion Detection System), IPS (Intrusion Prevention System), Firewall systems (Fortinet, Juniper, Netgate), Session Border Controller (SBC), Encryption data and voice",
+      color: "text-primary",
+      image: "/placeholder.svg?height=200&width=400&text=Cybersecurity",
     },
     {
       icon: Camera,
-      title: "Video Surveillance and Access Control",
-      subtitle: "CCTV and access control systems",
-      description: "Modern security and control systems",
-      features: [
-        "IP and analog cameras",
-        "Video analytics",
-        "Access control systems",
-        "System integration",
-      ],
+      title: "CCTV and access control systems",
+      description: "Video surveillance systems (CCTV), Intelligent video analytics (IVA) & video content analysis (VCA), Access control systems, Video wall systems",
+      color: "text-secondary",
+      image: "/placeholder.svg?height=200&width=400&text=CCTV+Access",
     },
-  ];
-
-  const services = [
-    "Design and Consulting",
-    "Installation and Commissioning",
-    "24/7 Technical Support",
-    "Service and Repair",
   ];
 
   return (
@@ -120,24 +59,22 @@ const Solutions = () => {
       </section>
 
       <section className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {solutions.map((solution, index) => (
-            <Card key={index} className="border-border hover:shadow-lg transition-all">
+            <Card key={index} className="hover:shadow-lg transition-all border-border overflow-hidden">
+              <div className="relative h-40 bg-muted">
+                <img
+                  src={solution.image}
+                  alt={solution.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <CardHeader>
-                <solution.icon className="h-12 w-12 text-primary mb-4" />
-                <CardTitle className="text-xl">{solution.title}</CardTitle>
-                <CardDescription className="text-sm italic">{solution.subtitle}</CardDescription>
+                <solution.icon className={`h-12 w-12 ${solution.color} mb-4`} />
+                <CardTitle className="text-lg">{solution.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground mb-4">{solution.description}</p>
-                <ul className="space-y-2">
-                  {solution.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start space-x-2 text-sm">
-                      <CheckCircle className="h-4 w-4 text-secondary mt-0.5 shrink-0" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
+                <CardDescription>{solution.description}</CardDescription>
               </CardContent>
             </Card>
           ))}
@@ -146,22 +83,21 @@ const Solutions = () => {
 
       <section className="bg-muted py-16">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Our Services</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {services.map((service, index) => (
-              <Card key={index} className="text-center border-border">
-                <CardHeader>
-                  <CheckCircle className="h-10 w-10 text-primary mx-auto mb-3" />
-                  <CardTitle className="text-lg">{service}</CardTitle>
-                </CardHeader>
-              </Card>
-            ))}
-          </div>
-          <div className="text-center mt-12">
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Planning and design, consulting, installation, commissioning and start up.
-              Technical support, maintenance and repair services.
-            </p>
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-foreground">
+              Our Commitment to Excellence
+            </h2>
+            <div className="space-y-6 text-muted-foreground text-lg">
+              <p>
+                <span className="font-semibold text-foreground">Sungur Electronics</span> strives to be an innovation-driven company, deeply focused on our clients' unique needs and objectives. Our core expertise lies in system integration. We provide a comprehensive range of information technology and automation services—from initial strategy development to implementation, ongoing support, and maintenance.
+              </p>
+              <p>
+                Our greatest asset is our team of professional consultants and technical specialists. Our engineers regularly undergo international training to stay at the forefront of the industry. Their high level of expertise is backed by numerous certifications from leading global manufacturers and, most importantly, by a proven track record of successfully completed projects.
+              </p>
+              <p>
+                At Sungur Electronics, we are committed to building long-term, professional partnerships. To us, partnership means mutual growth and shared success. We remain dedicated to being an innovative leader that anticipates and meets the evolving challenges of our clients.
+              </p>
+            </div>
           </div>
         </div>
       </section>
