@@ -218,7 +218,9 @@ const Home = () => {
                   <img
                     src={vendor.logo}
                     alt={vendor.name}
-                    className="w-full h-20 object-contain grayscale hover:grayscale-0 transition-all"
+                    className={`w-full object-contain grayscale hover:grayscale-0 transition-all ${
+                      vendor.name === "Mitel" ? "h-24" : "h-20"
+                    }`}
                   />
                 </div>
               </div>
