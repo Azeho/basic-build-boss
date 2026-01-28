@@ -4,6 +4,7 @@ import pabxImg from "@/assets/pabx.jpg";
 import networkImg from "@/assets/network.jpg";
 import scadaImg from "@/assets/scada.jpg";
 import audioImg from "@/assets/audio.jpg";
+import audioconfImg from "@/assets/audioconf.jpg";
 import cyberImg from "@/assets/cyber.png";
 import cctvImg from "@/assets/cctv.jpg";
 import techsImg from "@/assets/techs.jpg";
@@ -37,7 +38,7 @@ const Solutions = () => {
       title: "Audio and video conference systems",
       description: "Professional audio-conferencing systems, Professional video-conferencing systems, Virtual conferencing systems, Simultaneous translation systems",
       color: "text-secondary",
-      image: audioImg,
+      image: audioconfImg,
     },
     {
       icon: Shield,
