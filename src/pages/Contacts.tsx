@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Phone, Mail, MapPin, Clock, CheckCircle } from "lucide-react";
 import { useState } from "react";
+import mitelLogo from "@/assets/mitel.jpg";
 
 const Contacts = () => {
   const [formData, setFormData] = useState({
@@ -166,21 +167,25 @@ const Contacts = () => {
 
             <Card className="mt-6 border-primary bg-primary/5">
               <CardHeader>
-                <CardTitle className="text-lg">MITEL Partner</CardTitle>
+                <div className="flex justify-center">
+                  <img src={mitelLogo} alt="MITEL Partner" className="h-16 object-contain" />
+                </div>
               </CardHeader>
               <CardContent>
-                <CardDescription className="mb-4">
+                <CardDescription className="mb-4 text-center">
                   We are an official MITEL partner in Turkmenistan
                 </CardDescription>
-                <a
-                  href="https://www.mitel.com/partners/partner-locator"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button variant="outline" size="sm">
-                    Partner Locator
-                  </Button>
-                </a>
+                <div className="flex justify-center">
+                  <a
+                    href="https://www.mitel.com/partners/partner-locator"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="outline" size="sm">
+                      Partner Locator
+                    </Button>
+                  </a>
+                </div>
               </CardContent>
             </Card>
           </div>
