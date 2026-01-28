@@ -6,6 +6,7 @@ import scadaImg from "@/assets/scada.jpg";
 import audioImg from "@/assets/audio.jpg";
 import cyberImg from "@/assets/cyber.png";
 import cctvImg from "@/assets/cctv.jpg";
+import commImg from "@/assets/comm.jpg";
 import techsImg from "@/assets/techs.jpg";
 import systemsImg from "@/assets/systems.jpg";
 
@@ -58,7 +59,7 @@ const Solutions = () => {
       title: "Dispatcher communications systems",
       description: "OpenScape Xpert Mitel (Unify), OpenScape Alarm Response OScAR Mitel (Unify)",
       color: "text-primary",
-      image: audioImg,
+      image: commImg,
     },
     {
       icon: Wrench,
