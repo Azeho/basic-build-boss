@@ -25,10 +25,34 @@ const Navigation = () => {
       const style = document.createElement("style");
       style.id = "gt-suppress-style";
       style.textContent = `
-        .goog-te-banner-frame { display: none !important; }
-        body { top: 0 !important; }
-        .goog-te-gadget { font-size: 0 !important; }
-        .goog-te-gadget > span { display: none !important; }
+        /* Completely hide Google Translate banner and notification bar */
+        .goog-te-banner-frame,
+        .goog-te-banner-frame.skiptranslate {
+          display: none !important;
+          visibility: hidden !important;
+          height: 0 !important;
+          opacity: 0 !important;
+        }
+
+        /* Prevent body from being pushed down */
+        body {
+          top: 0 !important;
+          position: static !important;
+        }
+
+        /* Hide the "Powered by" text */
+        .goog-te-gadget {
+          font-size: 0 !important;
+          color: transparent !important;
+        }
+        .goog-te-gadget > span {
+          display: none !important;
+        }
+        .goog-te-gadget img {
+          display: none !important;
+        }
+
+        /* Style the dropdown select */
         #google_translate_element select {
           border: 1px solid #d1d5db;
           border-radius: 6px;
@@ -37,6 +61,20 @@ const Navigation = () => {
           cursor: pointer;
           outline: none;
           width: 100%;
+          background: white;
+          color: #111;
+        }
+
+        /* Additional overrides for notification bar */
+        body > .skiptranslate,
+        #goog-gt-tt,
+        .goog-te-spinner-pos {
+          display: none !important;
+        }
+
+        iframe.skiptranslate {
+          visibility: hidden !important;
+          height: 0 !important;
         }
       `;
       document.head.appendChild(style);
@@ -93,11 +131,12 @@ const Navigation = () => {
       {/* Fixed translate dropdown — always in DOM so the widget can initialize */}
       <div
         ref={dropdownRef}
-        className={`fixed top-[65px] right-4 z-[200] bg-background border border-border rounded-lg shadow-lg p-3 min-w-[200px] ${
-          translateOpen ? "block" : "hidden"
-        }`}
+        className={`fixed z-[200] bg-background border border-border rounded-lg shadow-xl p-4
+          top-[70px] right-4 min-w-[240px]
+          lg:top-[65px] lg:right-4 lg:min-w-[200px]
+          ${translateOpen ? "block" : "hidden"}`}
       >
-        <p className="text-xs text-muted-foreground mb-2 font-medium">Translate page</p>
+        <p className="text-sm text-foreground mb-2 font-semibold">Translate Page</p>
         <div id="google_translate_element" />
       </div>
 
