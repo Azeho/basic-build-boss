@@ -87,17 +87,26 @@ const Navigation = () => {
           position: static !important;
         }
 
-        /* COMPLETELY hide the Google Translate widget */
+        /* Hide the Google Translate widget visually but keep it in DOM */
         #google_translate_element,
         #google_translate_element_mobile {
-          display: none !important;
-          visibility: hidden !important;
           position: absolute !important;
+          top: -9999px !important;
           left: -9999px !important;
+          width: 1px !important;
+          height: 1px !important;
+          opacity: 0 !important;
+          overflow: hidden !important;
+        }
+
+        /* Hide visual elements but keep select functional */
+        .goog-te-gadget span {
+          display: none !important;
         }
 
         .goog-te-gadget {
-          display: none !important;
+          font-size: 0 !important;
+          color: transparent !important;
         }
 
         /* Hide Google logo */
@@ -239,8 +248,8 @@ const Navigation = () => {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Hidden Google Translate widget */}
-            <div id="google_translate_element" style={{ display: "none" }}></div>
+            {/* Hidden Google Translate widget (hidden via CSS, not inline style) */}
+            <div id="google_translate_element"></div>
           </div>
 
           {/* Mobile controls */}
