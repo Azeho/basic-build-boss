@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
-import { Phone, Mail, Menu, X, Globe } from "lucide-react";
+import { Phone, Mail, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import logoImage from "@/assets/sungur-logo.png";
 
 declare global {
@@ -14,29 +14,59 @@ declare global {
 const Navigation = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [translateOpen, setTranslateOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const desktopBtnRef = useRef<HTMLButtonElement>(null);
-  const mobileBtnRef = useRef<HTMLButtonElement>(null);
 
   // Load Google Translate
   useEffect(() => {
-    if (!document.getElementById("gt-minimal-style")) {
+    if (!document.getElementById("gt-style")) {
       const style = document.createElement("style");
-      style.id = "gt-minimal-style";
+      style.id = "gt-style";
       style.textContent = `
-        /* Hide ALL Google Translate UI */
-        .goog-te-banner-frame,
-        body > .skiptranslate,
-        iframe.goog-te-banner-frame {
+        /* Hide Google Translate banner */
+        .goog-te-banner-frame {
           display: none !important;
         }
         body {
           top: 0 !important;
           position: static !important;
         }
+
+        /* Style the Google Translate widget */
         #google_translate_element {
+          display: inline-block;
+        }
+
+        /* Hide Google logo and "Powered by" */
+        .goog-logo-link,
+        .goog-te-gadget span {
           display: none !important;
+        }
+
+        /* Style the select dropdown */
+        .goog-te-gadget {
+          font-family: inherit !important;
+          font-size: 14px !important;
+          color: inherit !important;
+        }
+
+        .goog-te-combo {
+          margin: 0 !important;
+          padding: 6px 12px !important;
+          border: 1px solid #e2e8f0 !important;
+          border-radius: 6px !important;
+          background: white !important;
+          color: #1e293b !important;
+          font-size: 14px !important;
+          cursor: pointer !important;
+          outline: none !important;
+        }
+
+        .goog-te-combo:hover {
+          border-color: #cbd5e1 !important;
+        }
+
+        .goog-te-combo:focus {
+          border-color: #3b82f6 !important;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
         }
       `;
       document.head.appendChild(style);
@@ -46,7 +76,7 @@ const Navigation = () => {
       new window.google.translate.TranslateElement(
         {
           pageLanguage: "en",
-          includedLanguages: "ar,ru,tr,zh-CN,es,fr,de,ja,ko,pt,hi,it,nl,pl,sv,th,vi",
+          includedLanguages: "ar,ru,tr,zh-CN,es,fr,de",
           layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
         },
         "google_translate_element"
@@ -63,44 +93,6 @@ const Navigation = () => {
     }
   }, []);
 
-  // Function to trigger translation
-  const changeLanguage = (langCode: string) => {
-    const selectElement = document.querySelector("select.goog-te-combo") as HTMLSelectElement;
-    if (selectElement) {
-      selectElement.value = langCode;
-      selectElement.dispatchEvent(new Event("change", { bubbles: true }));
-      setTranslateOpen(false);
-    }
-  };
-
-  const languages = [
-    { code: "en", name: "English", flag: "🇬🇧" },
-    { code: "ar", name: "العربية", flag: "🇸🇦" },
-    { code: "ru", name: "Русский", flag: "🇷🇺" },
-    { code: "tr", name: "Türkçe", flag: "🇹🇷" },
-    { code: "zh-CN", name: "中文", flag: "🇨🇳" },
-    { code: "es", name: "Español", flag: "🇪🇸" },
-    { code: "fr", name: "Français", flag: "🇫🇷" },
-    { code: "de", name: "Deutsch", flag: "🇩🇪" },
-  ];
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    if (!translateOpen) return;
-    const handler = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const insideDropdown = dropdownRef.current?.contains(target);
-      const insideDesktopBtn = desktopBtnRef.current?.contains(target);
-      const insideMobileBtn = mobileBtnRef.current?.contains(target);
-
-      if (!insideDropdown && !insideDesktopBtn && !insideMobileBtn) {
-        setTranslateOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, [translateOpen]);
-
   const navItems = [
     { path: "/", label: "Home" },
     { path: "/solutions", label: "Solutions" },
@@ -113,35 +105,6 @@ const Navigation = () => {
 
   return (
     <nav className="bg-card border-b border-border sticky top-0 z-50 shadow-sm">
-      {/* Hidden Google Translate element */}
-      <div id="google_translate_element" style={{ display: "none" }} />
-
-      {/* Language dropdown */}
-      <div
-        ref={dropdownRef}
-        className={`fixed z-[100] bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600
-          rounded-lg shadow-lg overflow-hidden min-w-[200px]
-          transition-opacity duration-200
-          ${translateOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"}
-          top-[70px] right-4
-          lg:top-[65px] lg:right-6`}
-      >
-        <div className="py-1">
-          {languages.map((lang) => (
-            <button
-              key={lang.code}
-              onClick={() => changeLanguage(lang.code)}
-              className="w-full px-4 py-2.5 text-left flex items-center space-x-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-            >
-              <span className="text-xl">{lang.flag}</span>
-              <span className="text-sm font-medium text-gray-900 dark:text-white">
-                {lang.name}
-              </span>
-            </button>
-          ))}
-        </div>
-      </div>
-
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-3">
           <Link to="/" className="flex items-center">
@@ -184,30 +147,11 @@ const Navigation = () => {
                 Contact
               </Button>
             </a>
-            <Button
-              ref={desktopBtnRef}
-              variant="ghost"
-              size="icon"
-              onClick={() => setTranslateOpen((o) => !o)}
-              title="Translate page"
-              aria-label="Translate page"
-            >
-              <Globe className="h-5 w-5" />
-            </Button>
+            <div id="google_translate_element"></div>
           </div>
 
           {/* Mobile controls */}
           <div className="flex lg:hidden items-center space-x-1">
-            <Button
-              ref={mobileBtnRef}
-              variant="ghost"
-              size="icon"
-              onClick={() => setTranslateOpen((o) => !o)}
-              title="Translate page"
-              aria-label="Translate page"
-            >
-              <Globe className="h-5 w-5" />
-            </Button>
             <Button
               variant="ghost"
               size="icon"
