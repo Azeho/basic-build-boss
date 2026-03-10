@@ -66,6 +66,9 @@ const Navigation = () => {
           color: #1f2937;
           transition: all 0.2s ease;
           box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+          position: relative;
+          z-index: 9999;
+          pointer-events: auto;
         }
 
         #google_translate_element select:hover {
@@ -76,6 +79,42 @@ const Navigation = () => {
         #google_translate_element select:focus {
           border-color: #3b82f6;
           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Ensure dropdown options are visible */
+        #google_translate_element select option {
+          background: white;
+          color: #1f2937;
+          padding: 8px;
+        }
+
+        /* Style the container */
+        #google_translate_element {
+          position: relative;
+          z-index: 9999;
+        }
+
+        /* Style the Google Translate gadget */
+        .goog-te-gadget {
+          font-family: inherit !important;
+          position: relative;
+          z-index: 9999;
+        }
+
+        .goog-te-gadget-simple {
+          background: transparent !important;
+          border: none !important;
+          font-size: 14px !important;
+          display: inline-block !important;
+          padding: 0 !important;
+        }
+
+        .goog-te-menu-value {
+          color: #1f2937 !important;
+        }
+
+        .goog-te-menu-value span {
+          color: #1f2937 !important;
         }
 
         /* Additional overrides for notification bar */
@@ -144,19 +183,20 @@ const Navigation = () => {
       {/* Fixed translate dropdown — always in DOM so the widget can initialize */}
       <div
         ref={dropdownRef}
-        className={`fixed z-[200] bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700
-          rounded-xl shadow-2xl p-5
+        className={`fixed z-[9999] bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700
+          rounded-xl shadow-2xl p-5 overflow-visible
           top-[72px] right-4 left-4 mx-auto max-w-[320px]
           sm:left-auto sm:max-w-none sm:min-w-[280px]
           lg:top-[68px] lg:right-6 lg:min-w-[260px]
           transition-all duration-200 ease-in-out
           ${translateOpen ? "block opacity-100 scale-100" : "hidden opacity-0 scale-95"}`}
+        style={{ isolation: 'auto' }}
       >
         <div className="flex items-center gap-2 mb-3">
           <Globe className="h-5 w-5 text-primary" />
           <p className="text-base text-foreground font-semibold">Select Language</p>
         </div>
-        <div id="google_translate_element" className="min-h-[44px]" />
+        <div id="google_translate_element" className="min-h-[44px] overflow-visible" style={{ position: 'relative', zIndex: 9999 }} />
       </div>
 
       <div className="container mx-auto px-4">
