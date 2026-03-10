@@ -110,8 +110,20 @@ const Navigation = () => {
           pageLanguage: "en",
           includedLanguages: "ar,ru,tr,zh-CN,es,fr,de,en",
           layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+          autoDisplay: false, // THIS DISABLES THE BANNER!
         },
         "google_translate_element"
+      );
+
+      // Also initialize for mobile
+      new window.google.translate.TranslateElement(
+        {
+          pageLanguage: "en",
+          includedLanguages: "ar,ru,tr,zh-CN,es,fr,de,en",
+          layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+          autoDisplay: false,
+        },
+        "google_translate_element_mobile"
       );
     };
 
@@ -228,6 +240,11 @@ const Navigation = () => {
                   Contact
                 </Button>
               </a>
+
+              {/* Mobile Google Translate */}
+              <div className="pt-2">
+                <div id="google_translate_element_mobile"></div>
+              </div>
             </div>
           </div>
         )}
