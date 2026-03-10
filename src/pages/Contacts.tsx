@@ -5,8 +5,20 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Phone, Mail, MapPin, Clock, CheckCircle } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import mitelLogo from "@/assets/mitel.jpg";
+
+declare global {
+  interface Window {
+    grecaptcha: {
+      ready: (callback: () => void) => void;
+      render: (container: string | HTMLElement, options: { sitekey: string; callback: (token: string) => void }) => number;
+      reset: (widgetId?: number) => void;
+    };
+  }
+}
+
+const RECAPTCHA_SITE_KEY = "6Le6soUsAAAAAOGuibG0IIEPUCmfGmS5DFMZRiVf";
 
 const Contacts = () => {
   const [formData, setFormData] = useState({
@@ -17,14 +29,59 @@ const Contacts = () => {
   });
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState("");
+  const [recaptchaToken, setRecaptchaToken] = useState<string>("");
+  const recaptchaRef = useRef<HTMLDivElement>(null);
+  const recaptchaWidgetId = useRef<number | null>(null);
+
+  // Load reCAPTCHA script
+  useEffect(() => {
+    if (!document.getElementById("recaptcha-script")) {
+      const script = document.createElement("script");
+      script.id = "recaptcha-script";
+      script.src = "https://www.google.com/recaptcha/api.js?render=explicit";
+      script.async = true;
+      script.defer = true;
+      document.body.appendChild(script);
+    }
+
+    // Render reCAPTCHA widget when ready
+    const renderRecaptcha = () => {
+      if (window.grecaptcha && recaptchaRef.current && recaptchaWidgetId.current === null) {
+        window.grecaptcha.ready(() => {
+          recaptchaWidgetId.current = window.grecaptcha.render(recaptchaRef.current!, {
+            sitekey: RECAPTCHA_SITE_KEY,
+            callback: (token: string) => {
+              setRecaptchaToken(token);
+            },
+          });
+        });
+      }
+    };
+
+    // Poll for grecaptcha availability
+    const interval = setInterval(() => {
+      if (window.grecaptcha) {
+        renderRecaptcha();
+        clearInterval(interval);
+      }
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!recaptchaToken) {
+      alert("Please complete the reCAPTCHA verification");
+      return;
+    }
 
     // Track form submission with timestamp
     console.log('Contact form submitted:', {
       timestamp: new Date().toISOString(),
       formData: formData,
+      recaptchaToken: recaptchaToken,
     });
 
     // Store email for confirmation dialog
@@ -35,6 +92,12 @@ const Contacts = () => {
 
     // Clear form
     setFormData({ name: "", email: "", phone: "", message: "" });
+
+    // Reset reCAPTCHA
+    setRecaptchaToken("");
+    if (window.grecaptcha && recaptchaWidgetId.current !== null) {
+      window.grecaptcha.reset(recaptchaWidgetId.current);
+    }
   };
 
   const contactInfo = [
@@ -130,7 +193,12 @@ const Contacts = () => {
                 />
               </div>
 
-              <Button type="submit" size="lg" className="w-full">
+              <div>
+                <Label>Verification *</Label>
+                <div ref={recaptchaRef} className="mt-2" />
+              </div>
+
+              <Button type="submit" size="lg" className="w-full" disabled={!recaptchaToken}>
                 Send Message
               </Button>
             </form>
