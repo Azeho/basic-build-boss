@@ -40,16 +40,18 @@ const Navigation = () => {
           position: static !important;
         }
 
-        /* Hide the "Powered by" text */
-        .goog-te-gadget {
-          font-size: 0 !important;
-          color: transparent !important;
-        }
-        .goog-te-gadget > span {
+        /* Hide the "Powered by" text and logo, but keep the select visible */
+        .goog-te-gadget > span:first-child {
           display: none !important;
         }
         .goog-te-gadget img {
           display: none !important;
+        }
+        .goog-logo-link {
+          display: none !important;
+        }
+        .goog-te-gadget > div {
+          display: inline !important;
         }
 
         /* Style the dropdown select */
@@ -117,16 +119,46 @@ const Navigation = () => {
           color: #1f2937 !important;
         }
 
+        /* Style Google Translate dropdown menu (appears outside the container) */
+        .goog-te-menu-frame {
+          z-index: 99999 !important;
+          max-height: 400px !important;
+          overflow-y: auto !important;
+        }
+
+        .goog-te-menu2 {
+          max-height: 400px !important;
+          overflow-y: auto !important;
+          background: white !important;
+        }
+
+        .goog-te-menu2-item {
+          padding: 8px 12px !important;
+          font-size: 14px !important;
+        }
+
+        .goog-te-menu2-item:hover {
+          background: #f3f4f6 !important;
+        }
+
         /* Additional overrides for notification bar */
-        body > .skiptranslate,
+        body > .skiptranslate:not(.goog-te-menu-frame),
         #goog-gt-tt,
-        .goog-te-spinner-pos {
+        .goog-te-spinner-pos,
+        .goog-te-banner-frame {
           display: none !important;
         }
 
-        iframe.skiptranslate {
+        iframe.skiptranslate:not(.goog-te-menu-frame) {
           visibility: hidden !important;
           height: 0 !important;
+        }
+
+        /* Make sure the menu frame iframe is visible */
+        iframe.goog-te-menu-frame.skiptranslate {
+          visibility: visible !important;
+          height: auto !important;
+          z-index: 99999 !important;
         }
       `;
       document.head.appendChild(style);
@@ -152,15 +184,24 @@ const Navigation = () => {
     }
   }, []);
 
-  // Close dropdown when clicking outside
+  // Close dropdown when clicking outside (but not on Google Translate elements)
   useEffect(() => {
     if (!translateOpen) return;
     const handler = (e: MouseEvent) => {
-      const target = e.target as Node;
+      const target = e.target as HTMLElement;
       const insideDropdown = dropdownRef.current?.contains(target);
       const insideDesktop = desktopBtnRef.current?.contains(target);
       const insideMobile = mobileBtnRef.current?.contains(target);
-      if (!insideDropdown && !insideDesktop && !insideMobile) {
+
+      // Check if clicking on Google Translate elements (they might be rendered outside the dropdown)
+      const isGoogleTranslateElement =
+        target.closest('.goog-te-menu-frame') ||
+        target.closest('.goog-te-menu2') ||
+        target.closest('#google_translate_element') ||
+        target.classList.contains('goog-te-combo') ||
+        target.tagName === 'SELECT' && target.closest('#google_translate_element');
+
+      if (!insideDropdown && !insideDesktop && !insideMobile && !isGoogleTranslateElement) {
         setTranslateOpen(false);
       }
     };
