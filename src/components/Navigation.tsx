@@ -54,15 +54,28 @@ const Navigation = () => {
 
         /* Style the dropdown select */
         #google_translate_element select {
-          border: 1px solid #d1d5db;
-          border-radius: 6px;
-          padding: 6px 10px;
+          border: 2px solid #e5e7eb;
+          border-radius: 8px;
+          padding: 10px 14px;
           font-size: 14px;
+          font-weight: 500;
           cursor: pointer;
           outline: none;
           width: 100%;
           background: white;
-          color: #111;
+          color: #1f2937;
+          transition: all 0.2s ease;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        #google_translate_element select:hover {
+          border-color: #3b82f6;
+          box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+        }
+
+        #google_translate_element select:focus {
+          border-color: #3b82f6;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         /* Additional overrides for notification bar */
@@ -131,13 +144,19 @@ const Navigation = () => {
       {/* Fixed translate dropdown — always in DOM so the widget can initialize */}
       <div
         ref={dropdownRef}
-        className={`fixed z-[200] bg-background border border-border rounded-lg shadow-xl p-4
-          top-[70px] right-4 min-w-[240px]
-          lg:top-[65px] lg:right-4 lg:min-w-[200px]
-          ${translateOpen ? "block" : "hidden"}`}
+        className={`fixed z-[200] bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700
+          rounded-xl shadow-2xl p-5
+          top-[72px] right-4 left-4 mx-auto max-w-[320px]
+          sm:left-auto sm:max-w-none sm:min-w-[280px]
+          lg:top-[68px] lg:right-6 lg:min-w-[260px]
+          transition-all duration-200 ease-in-out
+          ${translateOpen ? "block opacity-100 scale-100" : "hidden opacity-0 scale-95"}`}
       >
-        <p className="text-sm text-foreground mb-2 font-semibold">Translate Page</p>
-        <div id="google_translate_element" />
+        <div className="flex items-center gap-2 mb-3">
+          <Globe className="h-5 w-5 text-primary" />
+          <p className="text-base text-foreground font-semibold">Select Language</p>
+        </div>
+        <div id="google_translate_element" className="min-h-[44px]" />
       </div>
 
       <div className="container mx-auto px-4">
