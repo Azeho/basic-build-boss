@@ -1,14 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
-import { Phone, Mail, Menu, X, Globe, ChevronDown } from "lucide-react";
+import { Phone, Mail, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import logoImage from "@/assets/sungur-logo.png";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 declare global {
   interface Window {
@@ -17,67 +11,18 @@ declare global {
   }
 }
 
-const languages = [
-  { code: "en", name: "English", flag: "🇬🇧" },
-  { code: "ru", name: "Русский", flag: "🇷🇺" },
-  { code: "tr", name: "Türkçe", flag: "🇹🇷" },
-  { code: "ar", name: "العربية", flag: "🇸🇦" },
-  { code: "zh-CN", name: "中文", flag: "🇨🇳" },
-  { code: "es", name: "Español", flag: "🇪🇸" },
-  { code: "fr", name: "Français", flag: "🇫🇷" },
-  { code: "de", name: "Deutsch", flag: "🇩🇪" },
-];
-
 const Navigation = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [currentLang, setCurrentLang] = useState("en");
-  const [translateReady, setTranslateReady] = useState(false);
 
-  // Function to change language with retry mechanism
-  const changeLanguage = (langCode: string) => {
-    const tryChange = (attempts = 0) => {
-      const selectElement = document.querySelector(
-        ".goog-te-combo"
-      ) as HTMLSelectElement;
-
-      if (selectElement) {
-        // Set the value
-        selectElement.value = langCode;
-
-        // Trigger change event with bubbles
-        const changeEvent = new Event("change", { bubbles: true, cancelable: true });
-        selectElement.dispatchEvent(changeEvent);
-
-        // Also trigger input event
-        const inputEvent = new Event("input", { bubbles: true, cancelable: true });
-        selectElement.dispatchEvent(inputEvent);
-
-        // Trigger click as backup
-        selectElement.click();
-
-        setCurrentLang(langCode);
-        console.log("Language changed to:", langCode);
-      } else if (attempts < 15) {
-        // Retry up to 15 times with 500ms delay
-        console.log("Waiting for Google Translate... attempt", attempts + 1);
-        setTimeout(() => tryChange(attempts + 1), 500);
-      } else {
-        console.error("Google Translate not ready after 15 attempts");
-        alert("Translation widget is loading. Please try again in a moment.");
-      }
-    };
-
-    tryChange();
-  };
-
-  // Load Google Translate
+  // Simple Google Translate setup
   useEffect(() => {
+    // Add styles to prevent banner from pushing content
     if (!document.getElementById("gt-style")) {
       const style = document.createElement("style");
       style.id = "gt-style";
       style.textContent = `
-        /* Hide Google Translate banner */
+        /* Hide the annoying banner */
         .goog-te-banner-frame {
           display: none !important;
         }
@@ -87,43 +32,44 @@ const Navigation = () => {
           position: static !important;
         }
 
-        /* Small widget in bottom corner during load, then hide when ready */
-        #google_translate_element,
-        #google_translate_element_mobile {
-          position: fixed !important;
-          bottom: 20px !important;
-          right: 20px !important;
-          z-index: 1000 !important;
-          padding: 4px !important;
-          background: white !important;
-          border: 1px solid #e5e7eb !important;
-          border-radius: 4px !important;
-          font-size: 12px !important;
+        /* Style the translate widget */
+        .goog-te-gadget {
+          font-family: inherit !important;
+          font-size: 14px !important;
         }
 
-        /* Hide widget completely after it's loaded */
-        #google_translate_element.gt-loaded,
-        #google_translate_element_mobile.gt-loaded {
-          position: absolute !important;
-          top: -9999px !important;
-          left: -9999px !important;
-          width: 1px !important;
-          height: 1px !important;
-          opacity: 0 !important;
-          overflow: hidden !important;
-        }
-
-        /* Hide visual elements but keep select functional */
-        .goog-te-gadget span {
+        /* Hide "Powered by" text */
+        .goog-te-gadget > span > a {
           display: none !important;
         }
 
-        .goog-te-gadget {
-          font-size: 12px !important;
-          color: #666 !important;
+        .goog-te-gadget > span {
+          display: none !important;
         }
 
-        /* Hide Google logo */
+        /* Style the dropdown */
+        .goog-te-combo {
+          padding: 6px 12px !important;
+          border: 1px solid #e2e8f0 !important;
+          border-radius: 6px !important;
+          background: white !important;
+          color: #1e293b !important;
+          font-size: 14px !important;
+          cursor: pointer !important;
+          outline: none !important;
+          font-family: inherit !important;
+        }
+
+        .goog-te-combo:hover {
+          border-color: #3b82f6 !important;
+        }
+
+        .goog-te-combo:focus {
+          border-color: #3b82f6 !important;
+          box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1) !important;
+        }
+
+        /* Hide Google branding */
         .goog-logo-link {
           display: none !important;
         }
@@ -135,52 +81,19 @@ const Navigation = () => {
       document.head.appendChild(style);
     }
 
+    // Initialize Google Translate
     window.googleTranslateElementInit = () => {
-      console.log("Google Translate initializing...");
-      if (document.getElementById("google_translate_element")) {
-        try {
-          new window.google.translate.TranslateElement(
-            {
-              pageLanguage: "en",
-              includedLanguages: "ar,ru,tr,zh-CN,es,fr,de",
-              layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
-              autoDisplay: false,
-            },
-            "google_translate_element"
-          );
-          console.log("Google Translate element created");
-
-          // Check when Google Translate is ready
-          const checkReady = setInterval(() => {
-            const combo = document.querySelector(".goog-te-combo");
-            if (combo) {
-              setTranslateReady(true);
-              clearInterval(checkReady);
-              console.log("Google Translate is READY!", combo);
-
-              // Hide the widget now that it's loaded
-              const container = document.getElementById("google_translate_element");
-              if (container) {
-                container.classList.add("gt-loaded");
-                console.log("Widget hidden - ready to use!");
-              }
-            }
-          }, 100);
-
-          // Clear interval after 10 seconds if not ready
-          setTimeout(() => {
-            clearInterval(checkReady);
-            const combo = document.querySelector(".goog-te-combo");
-            if (!combo) {
-              console.error("Google Translate failed to load after 10 seconds");
-            }
-          }, 10000);
-        } catch (error) {
-          console.error("Error initializing Google Translate:", error);
-        }
-      }
+      new window.google.translate.TranslateElement(
+        {
+          pageLanguage: "en",
+          includedLanguages: "ar,ru,tr,zh-CN,es,fr,de,en",
+          layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+        },
+        "google_translate_element"
+      );
     };
 
+    // Load the Google Translate script
     if (!document.getElementById("gt-script")) {
       const script = document.createElement("script");
       script.id = "gt-script";
@@ -239,6 +152,7 @@ const Navigation = () => {
               <Phone className="h-4 w-4" />
               <span>+993 12 97-43-33</span>
             </a>
+
             <a href="mailto:info@sungur-electronics.com">
               <Button variant="default" size="sm">
                 <Mail className="h-4 w-4 mr-2" />
@@ -246,30 +160,7 @@ const Navigation = () => {
               </Button>
             </a>
 
-            {/* Custom Language Selector */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Globe className="h-4 w-4" />
-                  {languages.find((l) => l.code === currentLang)?.flag || "🌐"}
-                  <ChevronDown className="h-3 w-3" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                {languages.map((lang) => (
-                  <DropdownMenuItem
-                    key={lang.code}
-                    onClick={() => changeLanguage(lang.code)}
-                    className="cursor-pointer flex items-center gap-2"
-                  >
-                    <span className="text-lg">{lang.flag}</span>
-                    <span>{lang.name}</span>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            {/* Hidden Google Translate widget (hidden via CSS, not inline style) */}
+            {/* Google Translate */}
             <div id="google_translate_element"></div>
           </div>
 
@@ -316,28 +207,10 @@ const Navigation = () => {
                 </Button>
               </a>
 
-              {/* Mobile Language Selector */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="w-full gap-2">
-                    <Globe className="h-4 w-4" />
-                    {languages.find((l) => l.code === currentLang)?.name || "Language"}
-                    <ChevronDown className="h-3 w-3 ml-auto" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  {languages.map((lang) => (
-                    <DropdownMenuItem
-                      key={lang.code}
-                      onClick={() => changeLanguage(lang.code)}
-                      className="cursor-pointer flex items-center gap-2"
-                    >
-                      <span className="text-lg">{lang.flag}</span>
-                      <span>{lang.name}</span>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+              {/* Mobile Google Translate */}
+              <div className="pt-2">
+                <div id="google_translate_element_mobile"></div>
+              </div>
             </div>
           </div>
         )}
