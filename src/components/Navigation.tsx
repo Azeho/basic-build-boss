@@ -1,8 +1,15 @@
 import { Link, useLocation } from "react-router-dom";
-import { Phone, Mail, Menu, X } from "lucide-react";
+import { Phone, Mail, Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import logoImage from "@/assets/sungur-logo.png";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 declare global {
   interface Window {
@@ -11,78 +18,39 @@ declare global {
   }
 }
 
+const languages = [
+  { code: "en", name: "English", flag: "🇬🇧" },
+  { code: "ru", name: "Русский", flag: "🇷🇺" },
+  { code: "tr", name: "Türkçe", flag: "🇹🇷" },
+  { code: "ar", name: "العربية", flag: "🇸🇦" },
+  { code: "zh-CN", name: "中文", flag: "🇨🇳" },
+  { code: "es", name: "Español", flag: "🇪🇸" },
+  { code: "fr", name: "Français", flag: "🇫🇷" },
+  { code: "de", name: "Deutsch", flag: "🇩🇪" },
+];
+
 const Navigation = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [currentLang, setCurrentLang] = useState("en");
 
-  // Load Google Translate
+  // Load Google Translate (hidden)
   useEffect(() => {
     if (!document.getElementById("gt-style")) {
       const style = document.createElement("style");
       style.id = "gt-style";
       style.textContent = `
-        /* Hide Google Translate banner */
-        .goog-te-banner-frame {
+        /* Hide Google Translate banner and widget */
+        .goog-te-banner-frame,
+        #google_translate_element {
           display: none !important;
         }
         body {
           top: 0 !important;
           position: static !important;
         }
-
-        /* Style the Google Translate widget */
-        #google_translate_element {
-          display: inline-block;
-        }
-
-        /* Hide Google logo but keep select visible */
-        .goog-logo-link {
+        .skiptranslate {
           display: none !important;
-        }
-
-        /* Keep the gadget text visible but hide powered by */
-        .goog-te-gadget span:first-child {
-          display: none !important;
-        }
-
-        /* Style the gadget container */
-        .goog-te-gadget {
-          font-family: inherit !important;
-          font-size: 14px !important;
-          color: inherit !important;
-        }
-
-        /* Style the select dropdown - make it fully visible and clickable */
-        .goog-te-combo {
-          margin: 0 !important;
-          padding: 8px 24px 8px 12px !important;
-          border: 1px solid #e2e8f0 !important;
-          border-radius: 6px !important;
-          background: white !important;
-          color: #1e293b !important;
-          font-size: 14px !important;
-          cursor: pointer !important;
-          outline: none !important;
-          min-width: 150px !important;
-          appearance: auto !important;
-          -webkit-appearance: menulist !important;
-          -moz-appearance: menulist !important;
-        }
-
-        .goog-te-combo:hover {
-          border-color: #cbd5e1 !important;
-        }
-
-        .goog-te-combo:focus {
-          border-color: #3b82f6 !important;
-          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
-        }
-
-        /* Make sure all options are visible */
-        .goog-te-combo option {
-          color: #1e293b !important;
-          background: white !important;
-          padding: 8px !important;
         }
       `;
       document.head.appendChild(style);
@@ -108,6 +76,25 @@ const Navigation = () => {
       document.body.appendChild(script);
     }
   }, []);
+
+  // Handle language change
+  const changeLanguage = (langCode: string) => {
+    setCurrentLang(langCode);
+
+    // Find and trigger Google Translate
+    const selectElement = document.querySelector(".goog-te-combo") as HTMLSelectElement;
+    if (selectElement) {
+      selectElement.value = langCode;
+      selectElement.dispatchEvent(new Event("change"));
+    } else {
+      // If Google Translate not ready, try manual URL approach
+      const newUrl = langCode === "en"
+        ? window.location.pathname
+        : `${window.location.pathname}#googtrans(en|${langCode})`;
+      window.location.hash = langCode === "en" ? "" : `googtrans(en|${langCode})`;
+      window.location.reload();
+    }
+  };
 
   const navItems = [
     { path: "/", label: "Home" },
@@ -163,7 +150,25 @@ const Navigation = () => {
                 Contact
               </Button>
             </a>
-            <div id="google_translate_element"></div>
+
+            {/* Custom Language Selector */}
+            <Select value={currentLang} onValueChange={changeLanguage}>
+              <SelectTrigger className="w-[140px] h-9">
+                <Globe className="h-4 w-4 mr-2" />
+                <SelectValue placeholder="Language" />
+              </SelectTrigger>
+              <SelectContent>
+                {languages.map((lang) => (
+                  <SelectItem key={lang.code} value={lang.code}>
+                    <span className="mr-2">{lang.flag}</span>
+                    {lang.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {/* Hidden Google Translate Element */}
+            <div id="google_translate_element" style={{ display: "none" }}></div>
           </div>
 
           {/* Mobile controls */}
@@ -208,6 +213,22 @@ const Navigation = () => {
                   Contact
                 </Button>
               </a>
+
+              {/* Mobile Language Selector */}
+              <Select value={currentLang} onValueChange={changeLanguage}>
+                <SelectTrigger className="w-full">
+                  <Globe className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Language" />
+                </SelectTrigger>
+                <SelectContent>
+                  {languages.map((lang) => (
+                    <SelectItem key={lang.code} value={lang.code}>
+                      <span className="mr-2">{lang.flag}</span>
+                      {lang.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
         )}
