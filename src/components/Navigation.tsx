@@ -32,17 +32,28 @@ const Navigation = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState("en");
+  const [translateReady, setTranslateReady] = useState(false);
 
-  // Function to change language
+  // Function to change language with retry mechanism
   const changeLanguage = (langCode: string) => {
-    const selectElement = document.querySelector(
-      ".goog-te-combo"
-    ) as HTMLSelectElement;
-    if (selectElement) {
-      selectElement.value = langCode;
-      selectElement.dispatchEvent(new Event("change"));
-      setCurrentLang(langCode);
-    }
+    const tryChange = (attempts = 0) => {
+      const selectElement = document.querySelector(
+        ".goog-te-combo"
+      ) as HTMLSelectElement;
+
+      if (selectElement) {
+        selectElement.value = langCode;
+        selectElement.dispatchEvent(new Event("change"));
+        setCurrentLang(langCode);
+      } else if (attempts < 10) {
+        // Retry up to 10 times with 300ms delay
+        setTimeout(() => tryChange(attempts + 1), 300);
+      } else {
+        console.error("Google Translate not ready");
+      }
+    };
+
+    tryChange();
   };
 
   // Load Google Translate
@@ -97,6 +108,17 @@ const Navigation = () => {
           },
           "google_translate_element"
         );
+
+        // Check when Google Translate is ready
+        const checkReady = setInterval(() => {
+          if (document.querySelector(".goog-te-combo")) {
+            setTranslateReady(true);
+            clearInterval(checkReady);
+          }
+        }, 100);
+
+        // Clear interval after 10 seconds if not ready
+        setTimeout(() => clearInterval(checkReady), 10000);
       }
     };
 
