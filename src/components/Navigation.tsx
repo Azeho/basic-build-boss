@@ -87,9 +87,23 @@ const Navigation = () => {
           position: static !important;
         }
 
-        /* Hide the Google Translate widget visually but keep it in DOM */
+        /* Small widget in bottom corner during load, then hide when ready */
         #google_translate_element,
         #google_translate_element_mobile {
+          position: fixed !important;
+          bottom: 20px !important;
+          right: 20px !important;
+          z-index: 1000 !important;
+          padding: 4px !important;
+          background: white !important;
+          border: 1px solid #e5e7eb !important;
+          border-radius: 4px !important;
+          font-size: 12px !important;
+        }
+
+        /* Hide widget completely after it's loaded */
+        #google_translate_element.gt-loaded,
+        #google_translate_element_mobile.gt-loaded {
           position: absolute !important;
           top: -9999px !important;
           left: -9999px !important;
@@ -105,8 +119,8 @@ const Navigation = () => {
         }
 
         .goog-te-gadget {
-          font-size: 0 !important;
-          color: transparent !important;
+          font-size: 12px !important;
+          color: #666 !important;
         }
 
         /* Hide Google logo */
@@ -143,6 +157,13 @@ const Navigation = () => {
               setTranslateReady(true);
               clearInterval(checkReady);
               console.log("Google Translate is READY!", combo);
+
+              // Hide the widget now that it's loaded
+              const container = document.getElementById("google_translate_element");
+              if (container) {
+                container.classList.add("gt-loaded");
+                console.log("Widget hidden - ready to use!");
+              }
             }
           }, 100);
 
