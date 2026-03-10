@@ -95,10 +95,10 @@ const Navigation = () => {
       {/* Fixed translate dropdown — always in DOM so the widget can initialize */}
       <div
         ref={dropdownRef}
-        className={`fixed z-[9999] bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600
+        className={`fixed z-[100] bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600
           rounded-lg shadow-lg p-3
-          top-[65px] right-4
-          lg:top-[60px] lg:right-6
+          top-[75px] right-4
+          lg:top-[73px] lg:right-6
           ${translateOpen ? "block" : "hidden"}`}
       >
         <div id="google_translate_element" />
