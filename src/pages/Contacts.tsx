@@ -18,7 +18,7 @@ declare global {
   }
 }
 
-const RECAPTCHA_SITE_KEY = "6Le6soUsAAAAAOGuibG0IIEPUCmfGmS5DFMZRiVf";
+const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || "6Le6soUsAAAAAOGuibG0IIEPUCmfGmS5DFMZRiVf";
 
 const Contacts = () => {
   const [formData, setFormData] = useState({
@@ -30,6 +30,7 @@ const Contacts = () => {
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState("");
   const [recaptchaToken, setRecaptchaToken] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const recaptchaRef = useRef<HTMLDivElement>(null);
   const recaptchaWidgetId = useRef<number | null>(null);
 
@@ -69,7 +70,7 @@ const Contacts = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!recaptchaToken) {
@@ -77,26 +78,59 @@ const Contacts = () => {
       return;
     }
 
-    // Track form submission with timestamp
-    console.log('Contact form submitted:', {
-      timestamp: new Date().toISOString(),
-      formData: formData,
-      recaptchaToken: recaptchaToken,
-    });
+    setIsSubmitting(true);
 
-    // Store email for confirmation dialog
-    setSubmittedEmail(formData.email);
+    try {
+      // Verify reCAPTCHA with backend
+      const response = await fetch('/api/verify-recaptcha', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          token: recaptchaToken,
+          formData: formData,
+        }),
+      });
 
-    // Show centered success modal
-    setShowSuccessDialog(true);
+      const data = await response.json();
 
-    // Clear form
-    setFormData({ name: "", email: "", phone: "", message: "" });
+      if (!response.ok) {
+        throw new Error(data.error || 'Verification failed');
+      }
 
-    // Reset reCAPTCHA
-    setRecaptchaToken("");
-    if (window.grecaptcha && recaptchaWidgetId.current !== null) {
-      window.grecaptcha.reset(recaptchaWidgetId.current);
+      // Track successful submission
+      console.log('Contact form submitted and verified:', {
+        timestamp: new Date().toISOString(),
+        formData: formData,
+        verified: true,
+      });
+
+      // Store email for confirmation dialog
+      setSubmittedEmail(formData.email);
+
+      // Show success modal
+      setShowSuccessDialog(true);
+
+      // Clear form
+      setFormData({ name: "", email: "", phone: "", message: "" });
+
+      // Reset reCAPTCHA
+      setRecaptchaToken("");
+      if (window.grecaptcha && recaptchaWidgetId.current !== null) {
+        window.grecaptcha.reset(recaptchaWidgetId.current);
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      alert(error instanceof Error ? error.message : 'Failed to submit form. Please try again.');
+
+      // Reset reCAPTCHA on error
+      setRecaptchaToken("");
+      if (window.grecaptcha && recaptchaWidgetId.current !== null) {
+        window.grecaptcha.reset(recaptchaWidgetId.current);
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -198,8 +232,8 @@ const Contacts = () => {
                 <div ref={recaptchaRef} className="mt-2" />
               </div>
 
-              <Button type="submit" size="lg" className="w-full" disabled={!recaptchaToken}>
-                Send Message
+              <Button type="submit" size="lg" className="w-full" disabled={!recaptchaToken || isSubmitting}>
+                {isSubmitting ? "Sending..." : "Send Message"}
               </Button>
             </form>
           </div>
