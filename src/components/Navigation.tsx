@@ -22,14 +22,36 @@ const Navigation = () => {
       const style = document.createElement("style");
       style.id = "gt-style";
       style.textContent = `
-        /* Hide the annoying banner */
+        /* AGGRESSIVELY hide the banner and fix body positioning */
+        .goog-te-banner-frame.skiptranslate {
+          display: none !important;
+          visibility: hidden !important;
+        }
+
+        body {
+          top: 0px !important;
+          position: static !important;
+        }
+
+        body.translated-ltr {
+          top: 0px !important;
+        }
+
+        body.translated-rtl {
+          top: 0px !important;
+        }
+
+        /* Hide all banner variations */
+        iframe.goog-te-banner-frame {
+          display: none !important;
+        }
+
         .goog-te-banner-frame {
           display: none !important;
         }
 
-        body {
-          top: 0 !important;
-          position: static !important;
+        #goog-gt-tt, .goog-te-balloon-frame {
+          display: none !important;
         }
 
         /* Style the translate widget */
@@ -206,11 +228,6 @@ const Navigation = () => {
                   Contact
                 </Button>
               </a>
-
-              {/* Mobile Google Translate */}
-              <div className="pt-2">
-                <div id="google_translate_element_mobile"></div>
-              </div>
             </div>
           </div>
         )}
