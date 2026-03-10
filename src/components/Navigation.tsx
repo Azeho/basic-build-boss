@@ -18,6 +18,7 @@ const Navigation = () => {
   const desktopBtnRef = useRef<HTMLButtonElement>(null);
   const mobileBtnRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const mobileDropdownRef = useRef<HTMLDivElement>(null);
 
   // Load Google Translate with minimal styling
   useEffect(() => {
@@ -25,13 +26,18 @@ const Navigation = () => {
       const style = document.createElement("style");
       style.id = "gt-minimal-style";
       style.textContent = `
-        /* Hide only the top banner */
-        .goog-te-banner-frame {
+        /* Hide ALL Google Translate injected UI elements */
+        .goog-te-banner-frame,
+        .goog-te-banner-frame.skiptranslate,
+        body > .skiptranslate,
+        iframe.goog-te-banner-frame,
+        iframe.skiptranslate {
           display: none !important;
         }
 
         body {
           top: 0 !important;
+          position: static !important;
         }
 
         /* Basic styling only */
@@ -43,14 +49,28 @@ const Navigation = () => {
     }
 
     window.googleTranslateElementInit = () => {
-      new window.google.translate.TranslateElement(
-        {
-          pageLanguage: "en",
-          includedLanguages: "ar,ru,tr,zh-CN,es,fr,de,ja,ko,pt,hi,it,nl,pl,sv,th,vi",
-          layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
-        },
-        "google_translate_element"
-      );
+      // Initialize for desktop
+      if (document.getElementById("google_translate_element")) {
+        new window.google.translate.TranslateElement(
+          {
+            pageLanguage: "en",
+            includedLanguages: "ar,ru,tr,zh-CN,es,fr,de,ja,ko,pt,hi,it,nl,pl,sv,th,vi",
+            layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+          },
+          "google_translate_element"
+        );
+      }
+      // Initialize for mobile
+      if (document.getElementById("google_translate_element_mobile")) {
+        new window.google.translate.TranslateElement(
+          {
+            pageLanguage: "en",
+            includedLanguages: "ar,ru,tr,zh-CN,es,fr,de,ja,ko,pt,hi,it,nl,pl,sv,th,vi",
+            layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+          },
+          "google_translate_element_mobile"
+        );
+      }
     };
 
     if (!document.getElementById("gt-script")) {
@@ -69,10 +89,11 @@ const Navigation = () => {
     const handler = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const insideDropdown = dropdownRef.current?.contains(target);
+      const insideMobileDropdown = mobileDropdownRef.current?.contains(target);
       const insideDesktop = desktopBtnRef.current?.contains(target);
       const insideMobile = mobileBtnRef.current?.contains(target);
 
-      if (!insideDropdown && !insideDesktop && !insideMobile) {
+      if (!insideDropdown && !insideMobileDropdown && !insideDesktop && !insideMobile) {
         setTranslateOpen(false);
       }
     };
@@ -92,18 +113,6 @@ const Navigation = () => {
 
   return (
     <nav className="bg-card border-b border-border sticky top-0 z-50 shadow-sm">
-      {/* Fixed translate dropdown — always in DOM so the widget can initialize */}
-      <div
-        ref={dropdownRef}
-        className={`fixed z-[100] bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600
-          rounded-lg shadow-lg p-3
-          top-[75px] right-4
-          lg:top-[73px] lg:right-6
-          ${translateOpen ? "block" : "hidden"}`}
-      >
-        <div id="google_translate_element" />
-      </div>
-
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-3">
           <Link to="/" className="flex items-center">
@@ -146,30 +155,54 @@ const Navigation = () => {
                 Contact
               </Button>
             </a>
-            <Button
-              ref={desktopBtnRef}
-              variant="ghost"
-              size="icon"
-              onClick={() => setTranslateOpen((o) => !o)}
-              title="Translate page"
-              aria-label="Translate page"
-            >
-              <Globe className="h-5 w-5" />
-            </Button>
+            {/* Desktop translate button with dropdown */}
+            <div className="relative">
+              <Button
+                ref={desktopBtnRef}
+                variant="ghost"
+                size="icon"
+                onClick={() => setTranslateOpen((o) => !o)}
+                title="Translate page"
+                aria-label="Translate page"
+              >
+                <Globe className="h-5 w-5" />
+              </Button>
+              {/* Desktop dropdown - positioned below button */}
+              <div
+                ref={dropdownRef}
+                className={`absolute top-full right-0 mt-2 z-[100] bg-white dark:bg-gray-800
+                  border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg p-3
+                  min-w-[250px] ${translateOpen ? "block" : "hidden"}`}
+              >
+                <div id="google_translate_element" />
+              </div>
+            </div>
           </div>
 
           {/* Mobile controls */}
           <div className="flex lg:hidden items-center space-x-1">
-            <Button
-              ref={mobileBtnRef}
-              variant="ghost"
-              size="icon"
-              onClick={() => setTranslateOpen((o) => !o)}
-              title="Translate page"
-              aria-label="Translate page"
-            >
-              <Globe className="h-5 w-5" />
-            </Button>
+            {/* Mobile translate button with dropdown */}
+            <div className="relative">
+              <Button
+                ref={mobileBtnRef}
+                variant="ghost"
+                size="icon"
+                onClick={() => setTranslateOpen((o) => !o)}
+                title="Translate page"
+                aria-label="Translate page"
+              >
+                <Globe className="h-5 w-5" />
+              </Button>
+              {/* Mobile dropdown - positioned below button */}
+              <div
+                ref={mobileDropdownRef}
+                className={`lg:hidden absolute top-full right-0 mt-2 z-[100] bg-white dark:bg-gray-800
+                  border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg p-3
+                  min-w-[250px] ${translateOpen ? "block" : "hidden"}`}
+              >
+                <div id="google_translate_element_mobile" />
+              </div>
+            </div>
             <Button
               variant="ghost"
               size="icon"
