@@ -35,22 +35,27 @@ const Navigation = () => {
           display: inline-block;
         }
 
-        /* Hide Google logo and "Powered by" */
-        .goog-logo-link,
-        .goog-te-gadget span {
+        /* Hide Google logo but keep select visible */
+        .goog-logo-link {
           display: none !important;
         }
 
-        /* Style the select dropdown */
+        /* Keep the gadget text visible but hide powered by */
+        .goog-te-gadget span:first-child {
+          display: none !important;
+        }
+
+        /* Style the gadget container */
         .goog-te-gadget {
           font-family: inherit !important;
           font-size: 14px !important;
           color: inherit !important;
         }
 
+        /* Style the select dropdown - make it fully visible and clickable */
         .goog-te-combo {
           margin: 0 !important;
-          padding: 6px 12px !important;
+          padding: 8px 24px 8px 12px !important;
           border: 1px solid #e2e8f0 !important;
           border-radius: 6px !important;
           background: white !important;
@@ -58,6 +63,10 @@ const Navigation = () => {
           font-size: 14px !important;
           cursor: pointer !important;
           outline: none !important;
+          min-width: 150px !important;
+          appearance: auto !important;
+          -webkit-appearance: menulist !important;
+          -moz-appearance: menulist !important;
         }
 
         .goog-te-combo:hover {
@@ -67,6 +76,13 @@ const Navigation = () => {
         .goog-te-combo:focus {
           border-color: #3b82f6 !important;
           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+        }
+
+        /* Make sure all options are visible */
+        .goog-te-combo option {
+          color: #1e293b !important;
+          background: white !important;
+          padding: 8px !important;
         }
       `;
       document.head.appendChild(style);
