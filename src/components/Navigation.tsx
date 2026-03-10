@@ -19,43 +19,24 @@ const Navigation = () => {
   const desktopBtnRef = useRef<HTMLButtonElement>(null);
   const mobileBtnRef = useRef<HTMLButtonElement>(null);
 
-  // Load Google Translate with minimal styling
+  // Load Google Translate
   useEffect(() => {
     if (!document.getElementById("gt-minimal-style")) {
       const style = document.createElement("style");
       style.id = "gt-minimal-style";
       style.textContent = `
-        /* Hide ALL Google Translate injected UI elements */
+        /* Hide ALL Google Translate UI */
         .goog-te-banner-frame,
-        .goog-te-banner-frame.skiptranslate,
         body > .skiptranslate,
-        iframe.goog-te-banner-frame,
-        iframe.skiptranslate {
+        iframe.goog-te-banner-frame {
           display: none !important;
         }
-
         body {
           top: 0 !important;
           position: static !important;
         }
-
-        /* Styling for translate widget */
         #google_translate_element {
-          width: 100%;
-        }
-
-        #google_translate_element select {
-          width: 100%;
-          padding: 0.5rem;
-          border-radius: 0.375rem;
-          border: 1px solid #d1d5db;
-          background-color: white;
-        }
-
-        .dark #google_translate_element select {
-          background-color: #1f2937;
-          border-color: #4b5563;
-          color: white;
+          display: none !important;
         }
       `;
       document.head.appendChild(style);
@@ -81,6 +62,27 @@ const Navigation = () => {
       document.body.appendChild(script);
     }
   }, []);
+
+  // Function to trigger translation
+  const changeLanguage = (langCode: string) => {
+    const selectElement = document.querySelector("select.goog-te-combo") as HTMLSelectElement;
+    if (selectElement) {
+      selectElement.value = langCode;
+      selectElement.dispatchEvent(new Event("change", { bubbles: true }));
+      setTranslateOpen(false);
+    }
+  };
+
+  const languages = [
+    { code: "en", name: "English", flag: "🇬🇧" },
+    { code: "ar", name: "العربية", flag: "🇸🇦" },
+    { code: "ru", name: "Русский", flag: "🇷🇺" },
+    { code: "tr", name: "Türkçe", flag: "🇹🇷" },
+    { code: "zh-CN", name: "中文", flag: "🇨🇳" },
+    { code: "es", name: "Español", flag: "🇪🇸" },
+    { code: "fr", name: "Français", flag: "🇫🇷" },
+    { code: "de", name: "Deutsch", flag: "🇩🇪" },
+  ];
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -111,17 +113,33 @@ const Navigation = () => {
 
   return (
     <nav className="bg-card border-b border-border sticky top-0 z-50 shadow-sm">
-      {/* Single translate dropdown - always in DOM, positioned absolutely */}
+      {/* Hidden Google Translate element */}
+      <div id="google_translate_element" style={{ display: "none" }} />
+
+      {/* Language dropdown */}
       <div
         ref={dropdownRef}
         className={`fixed z-[100] bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600
-          rounded-lg shadow-lg p-3 min-w-[280px]
+          rounded-lg shadow-lg overflow-hidden min-w-[200px]
           transition-opacity duration-200
           ${translateOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"}
           top-[70px] right-4
           lg:top-[65px] lg:right-6`}
       >
-        <div id="google_translate_element" />
+        <div className="py-1">
+          {languages.map((lang) => (
+            <button
+              key={lang.code}
+              onClick={() => changeLanguage(lang.code)}
+              className="w-full px-4 py-2.5 text-left flex items-center space-x-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            >
+              <span className="text-xl">{lang.flag}</span>
+              <span className="text-sm font-medium text-gray-900 dark:text-white">
+                {lang.name}
+              </span>
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="container mx-auto px-4">
