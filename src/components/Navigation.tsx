@@ -1,142 +1,41 @@
 import { Link, useLocation } from "react-router-dom";
-import { Phone, Mail, Menu, X } from "lucide-react";
+import { Phone, Mail, Menu, X, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import logoImage from "@/assets/sungur-logo.png";
-
-declare global {
-  interface Window {
-    googleTranslateElementInit: () => void;
-    google: { translate: { TranslateElement: any } };
-  }
-}
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const Navigation = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Simple Google Translate setup
-  useEffect(() => {
-    // Add styles to prevent banner from pushing content
-    if (!document.getElementById("gt-style")) {
-      const style = document.createElement("style");
-      style.id = "gt-style";
-      style.textContent = `
-        /* AGGRESSIVELY hide the banner and fix body positioning */
-        .goog-te-banner-frame.skiptranslate {
-          display: none !important;
-          visibility: hidden !important;
-        }
+  const languages = [
+    { code: "en", name: "English" },
+    { code: "ar", name: "العربية" },
+    { code: "ru", name: "Русский" },
+    { code: "tr", name: "Türkçe" },
+    { code: "zh", name: "中文" },
+    { code: "es", name: "Español" },
+    { code: "fr", name: "Français" },
+    { code: "de", name: "Deutsch" },
+  ];
 
-        body {
-          top: 0px !important;
-          position: static !important;
-        }
-
-        body.translated-ltr {
-          top: 0px !important;
-        }
-
-        body.translated-rtl {
-          top: 0px !important;
-        }
-
-        /* Hide all banner variations */
-        iframe.goog-te-banner-frame {
-          display: none !important;
-        }
-
-        .goog-te-banner-frame {
-          display: none !important;
-        }
-
-        #goog-gt-tt, .goog-te-balloon-frame {
-          display: none !important;
-        }
-
-        /* Style the translate widget */
-        .goog-te-gadget {
-          font-family: inherit !important;
-          font-size: 14px !important;
-        }
-
-        /* Hide "Powered by" text */
-        .goog-te-gadget > span > a {
-          display: none !important;
-        }
-
-        .goog-te-gadget > span {
-          display: none !important;
-        }
-
-        /* Style the dropdown */
-        .goog-te-combo {
-          padding: 6px 12px !important;
-          border: 1px solid #e2e8f0 !important;
-          border-radius: 6px !important;
-          background: white !important;
-          color: #1e293b !important;
-          font-size: 14px !important;
-          cursor: pointer !important;
-          outline: none !important;
-          font-family: inherit !important;
-        }
-
-        .goog-te-combo:hover {
-          border-color: #3b82f6 !important;
-        }
-
-        .goog-te-combo:focus {
-          border-color: #3b82f6 !important;
-          box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1) !important;
-        }
-
-        /* Hide Google branding */
-        .goog-logo-link {
-          display: none !important;
-        }
-
-        .goog-te-gadget img {
-          display: none !important;
-        }
-      `;
-      document.head.appendChild(style);
+  const translatePage = (targetLang: string) => {
+    if (targetLang === "en") {
+      // Reload original page
+      window.location.href = window.location.pathname;
+    } else {
+      // Use Yandex Translate
+      const currentUrl = encodeURIComponent(window.location.href);
+      window.location.href = `https://translate.yandex.com/translate?url=${currentUrl}&lang=en-${targetLang}`;
     }
-
-    // Initialize Google Translate
-    window.googleTranslateElementInit = () => {
-      new window.google.translate.TranslateElement(
-        {
-          pageLanguage: "en",
-          includedLanguages: "ar,ru,tr,zh-CN,es,fr,de,en",
-          layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
-          autoDisplay: false, // THIS DISABLES THE BANNER!
-        },
-        "google_translate_element"
-      );
-
-      // Also initialize for mobile
-      new window.google.translate.TranslateElement(
-        {
-          pageLanguage: "en",
-          includedLanguages: "ar,ru,tr,zh-CN,es,fr,de,en",
-          layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
-          autoDisplay: false,
-        },
-        "google_translate_element_mobile"
-      );
-    };
-
-    // Load the Google Translate script
-    if (!document.getElementById("gt-script")) {
-      const script = document.createElement("script");
-      script.id = "gt-script";
-      script.src =
-        "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-      script.async = true;
-      document.body.appendChild(script);
-    }
-  }, []);
+  };
 
   const navItems = [
     { path: "/", label: "Home" },
@@ -194,8 +93,20 @@ const Navigation = () => {
               </Button>
             </a>
 
-            {/* Google Translate */}
-            <div id="google_translate_element"></div>
+            {/* Language Selector */}
+            <Select onValueChange={translatePage}>
+              <SelectTrigger className="w-[140px]">
+                <Languages className="h-4 w-4 mr-2" />
+                <SelectValue placeholder="Language" />
+              </SelectTrigger>
+              <SelectContent>
+                {languages.map((lang) => (
+                  <SelectItem key={lang.code} value={lang.code}>
+                    {lang.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Mobile controls */}
@@ -241,9 +152,21 @@ const Navigation = () => {
                 </Button>
               </a>
 
-              {/* Mobile Google Translate */}
+              {/* Mobile Language Selector */}
               <div className="pt-2">
-                <div id="google_translate_element_mobile"></div>
+                <Select onValueChange={translatePage}>
+                  <SelectTrigger className="w-full">
+                    <Languages className="h-4 w-4 mr-2" />
+                    <SelectValue placeholder="Select Language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {languages.map((lang) => (
+                      <SelectItem key={lang.code} value={lang.code}>
+                        {lang.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </div>

@@ -15,45 +15,6 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@lovable_dev" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-
-    <!-- Google Translate Banner Fix -->
-    <meta name="google" content="notranslate" />
-    <style>
-      /* FORCE HIDE Google Translate banner - loaded before any scripts */
-      body {
-        top: 0px !important;
-        position: static !important;
-      }
-
-      .goog-te-banner-frame,
-      .goog-te-banner-frame.skiptranslate,
-      iframe.goog-te-banner-frame {
-        display: none !important;
-        visibility: hidden !important;
-        height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-      }
-
-      body.translated-ltr,
-      body.translated-rtl {
-        top: 0px !important;
-        margin-top: 0px !important;
-      }
-
-      #goog-gt-tt,
-      .goog-te-balloon-frame {
-        display: none !important;
-      }
-    </style>
-
-    <script>
-      // Continuously force body top to 0 to prevent Google Translate from pushing content
-      setInterval(function() {
-        document.body.style.top = '0px';
-        document.body.style.position = 'static';
-      }, 100);
-    </script>
   </head>
 
   <body>
