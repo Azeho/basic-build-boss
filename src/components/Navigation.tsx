@@ -1,57 +1,154 @@
 import { Link, useLocation } from "react-router-dom";
 import { Phone, Mail, Menu, X, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useState, useEffect } from "react";
 import logoImage from "@/assets/sungur-logo.png";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
+declare global {
+  interface Window {
+    googleTranslateElementInit: () => void;
+    google: any;
+  }
+}
 
 const Navigation = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { t, i18n } = useTranslation();
 
-  const languages = [
-    { code: "en", name: "English", nativeName: "English" },
-    { code: "ar", name: "Arabic", nativeName: "العربية" },
-    { code: "ru", name: "Russian", nativeName: "Русский" },
-    { code: "tr", name: "Turkish", nativeName: "Türkçe" },
-    { code: "zh", name: "Chinese", nativeName: "中文" },
-    { code: "es", name: "Spanish", nativeName: "Español" },
-    { code: "fr", name: "French", nativeName: "Français" },
-    { code: "de", name: "German", nativeName: "Deutsch" },
-  ];
+  useEffect(() => {
+    // Set cookie to prevent banner BEFORE Google Translate loads
+    document.cookie = "googtrans=/en/en; path=/; domain=.sungur-electronics.com";
+    document.cookie = "googtrans=/en/en; path=/";
 
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
-  };
+    // Initialize Google Translate
+    window.googleTranslateElementInit = () => {
+      new window.google.translate.TranslateElement(
+        {
+          pageLanguage: "en",
+          includedLanguages: "ar,ru,tr,zh-CN,es,fr,de,en",
+          layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+          autoDisplay: false,
+          multilanguagePage: true,
+        },
+        "google_translate_element"
+      );
 
-  const getCurrentLanguageName = () => {
-    const current = languages.find(lang => lang.code === i18n.language);
-    return current?.nativeName || "Language";
-  };
+      // Mobile widget
+      new window.google.translate.TranslateElement(
+        {
+          pageLanguage: "en",
+          includedLanguages: "ar,ru,tr,zh-CN,es,fr,de,en",
+          layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+          autoDisplay: false,
+          multilanguagePage: true,
+        },
+        "google_translate_mobile"
+      );
+    };
+
+    // Load Google Translate script
+    if (!document.getElementById("google-translate-script")) {
+      const script = document.createElement("script");
+      script.id = "google-translate-script";
+      script.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+      document.head.appendChild(script);
+    }
+
+    // AGGRESSIVE banner removal using MutationObserver
+    const observer = new MutationObserver(() => {
+      // Force body position
+      document.body.style.top = "0px";
+      document.body.style.position = "static";
+
+      // Find and hide ALL banner variations
+      const banners = document.querySelectorAll(
+        '.goog-te-banner-frame, .goog-te-banner-frame.skiptranslate, iframe.goog-te-banner-frame'
+      );
+
+      banners.forEach((banner) => {
+        (banner as HTMLElement).style.display = "none";
+        (banner as HTMLElement).style.visibility = "hidden";
+        banner.remove(); // Completely remove it from DOM
+      });
+
+      // Also check for the banner container
+      const iframes = document.querySelectorAll('iframe');
+      iframes.forEach((iframe) => {
+        if (iframe.className.includes('goog-te-banner')) {
+          iframe.style.display = 'none';
+          iframe.remove();
+        }
+      });
+    });
+
+    // Observe the entire document
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['style', 'class']
+    });
+
+    // Also run removal every 100ms as backup
+    const interval = setInterval(() => {
+      document.body.style.top = "0px";
+      document.body.style.position = "static";
+
+      const banners = document.querySelectorAll('.goog-te-banner-frame, iframe.goog-te-banner-frame');
+      banners.forEach(b => b.remove());
+    }, 100);
+
+    return () => {
+      observer.disconnect();
+      clearInterval(interval);
+    };
+  }, []);
 
   const navItems = [
-    { path: "/", label: t('nav.home') },
-    { path: "/solutions", label: t('nav.solutions') },
-    { path: "/industries", label: t('nav.industries') },
-    { path: "/about", label: t('nav.about') },
-    { path: "/contacts", label: t('nav.contacts') },
+    { path: "/", label: "Home" },
+    { path: "/solutions", label: "Solutions" },
+    { path: "/industries", label: "Industries" },
+    { path: "/about", label: "About" },
+    { path: "/contacts", label: "Contacts" },
   ];
 
   const isActive = (path: string) => location.pathname === path;
 
   return (
     <nav className="bg-card border-b border-border sticky top-0 z-50 shadow-sm">
+      <style>{`
+        /* FORCE HIDE BANNER */
+        body { top: 0px !important; position: static !important; }
+        .goog-te-banner-frame,
+        .goog-te-banner-frame.skiptranslate,
+        iframe.goog-te-banner-frame,
+        .goog-te-banner {
+          display: none !important;
+          visibility: hidden !important;
+          height: 0 !important;
+          position: absolute !important;
+          top: -9999px !important;
+        }
+        body.translated-ltr, body.translated-rtl { top: 0px !important; }
+
+        /* Style the widget */
+        .goog-te-gadget { font-family: inherit !important; }
+        .goog-te-gadget > span > a, .goog-te-gadget > span,
+        .goog-logo-link, .goog-te-gadget img { display: none !important; }
+
+        .goog-te-combo {
+          padding: 6px 12px !important;
+          border: 1px solid #e2e8f0 !important;
+          border-radius: 6px !important;
+          background: white !important;
+          font-size: 14px !important;
+          cursor: pointer !important;
+        }
+      `}</style>
+
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-3">
-          <Link to="/" className="flex items-center">
+          <Link to="/" className="flex items-center notranslate">
             <img
               src={logoImage}
               alt="Sungur Electronics"
@@ -80,7 +177,7 @@ const Navigation = () => {
           <div className="hidden lg:flex items-center space-x-2">
             <a
               href="tel:+993129743-33"
-              className="flex items-center space-x-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+              className="flex items-center space-x-2 text-sm text-muted-foreground hover:text-primary transition-colors notranslate"
             >
               <Phone className="h-4 w-4" />
               <span>+993 12 97-43-33</span>
@@ -89,24 +186,12 @@ const Navigation = () => {
             <a href="mailto:info@sungur-electronics.com">
               <Button variant="default" size="sm">
                 <Mail className="h-4 w-4 mr-2" />
-                {t('nav.contact')}
+                Contact
               </Button>
             </a>
 
-            {/* Language Selector */}
-            <Select onValueChange={changeLanguage} value={i18n.language}>
-              <SelectTrigger className="w-[140px]">
-                <Languages className="h-4 w-4 mr-2" />
-                <SelectValue>{getCurrentLanguageName()}</SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                {languages.map((lang) => (
-                  <SelectItem key={lang.code} value={lang.code}>
-                    {lang.nativeName}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {/* Google Translate Widget */}
+            <div id="google_translate_element" className="notranslate"></div>
           </div>
 
           {/* Mobile controls */}
@@ -140,7 +225,7 @@ const Navigation = () => {
             <div className="px-4 pt-4 space-y-3 border-t border-border mt-4">
               <a
                 href="tel:+993129743-33"
-                className="flex items-center space-x-2 text-sm text-muted-foreground"
+                className="flex items-center space-x-2 text-sm text-muted-foreground notranslate"
               >
                 <Phone className="h-4 w-4" />
                 <span>+993 12 97-43-33</span>
@@ -148,26 +233,12 @@ const Navigation = () => {
               <a href="mailto:info@sungur-electronics.com">
                 <Button variant="default" size="sm" className="w-full">
                   <Mail className="h-4 w-4 mr-2" />
-                  {t('nav.contact')}
+                  Contact
                 </Button>
               </a>
 
-              {/* Mobile Language Selector */}
-              <div className="pt-2">
-                <Select onValueChange={changeLanguage} value={i18n.language}>
-                  <SelectTrigger className="w-full">
-                    <Languages className="h-4 w-4 mr-2" />
-                    <SelectValue>{getCurrentLanguageName()}</SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    {languages.map((lang) => (
-                      <SelectItem key={lang.code} value={lang.code}>
-                        {lang.nativeName}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              {/* Mobile Google Translate */}
+              <div id="google_translate_mobile" className="notranslate"></div>
             </div>
           </div>
         )}
