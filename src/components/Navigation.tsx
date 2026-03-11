@@ -20,23 +20,28 @@ const Navigation = () => {
     const langCode = e.target.value;
     if (!langCode) return;
 
-    // Method 1: Try to trigger the desktop widget
-    const googleCombo = document.querySelector('.goog-te-combo') as HTMLSelectElement;
-    if (googleCombo) {
-      googleCombo.value = langCode;
-      googleCombo.dispatchEvent(new Event('change', { bubbles: true }));
-      return;
-    }
-
-    // Method 2: Use Google Translate's cookie method
-    const setCookie = (name: string, value: string, days: number) => {
-      const expires = new Date(Date.now() + days * 864e5).toUTCString();
-      document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+    // Helper to clear Google Translate cookies
+    const clearGoogleTranslateCookies = () => {
+      // Clear all Google Translate cookies
+      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + window.location.hostname;
+      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.' + window.location.hostname;
     };
 
-    // Set the Google Translate cookie and reload
-    setCookie('googtrans', `/en/${langCode}`, 1);
-    setCookie('googtrans', `/en/${langCode}`, 1); // Set twice for reliability
+    // Helper to set cookie
+    const setCookie = (name: string, value: string) => {
+      const expires = new Date(Date.now() + 864e5).toUTCString();
+      document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+      document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; domain=${window.location.hostname}`;
+    };
+
+    // Clear existing translations first
+    clearGoogleTranslateCookies();
+
+    // Set new language cookie
+    setCookie('googtrans', `/en/${langCode}`);
+
+    // Reload to apply translation
     window.location.reload();
   };
 
