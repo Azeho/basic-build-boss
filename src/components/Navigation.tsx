@@ -14,7 +14,19 @@ declare global {
 const Navigation = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [mobileTranslateInit, setMobileTranslateInit] = useState(false);
+
+  // Custom language change handler for mobile
+  const handleMobileLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const langCode = e.target.value;
+    if (langCode && window.google?.translate) {
+      // Find the Google Translate combo box and trigger it
+      const googleCombo = document.querySelector('.goog-te-combo') as HTMLSelectElement;
+      if (googleCombo) {
+        googleCombo.value = langCode;
+        googleCombo.dispatchEvent(new Event('change'));
+      }
+    }
+  };
 
   useEffect(() => {
     // EXACT implementation from arassa-meydan.com
@@ -65,49 +77,10 @@ const Navigation = () => {
           font-size: 14px !important;
           cursor: pointer !important;
         }
-
-        /* Mobile translate widget styling */
-        #google_translate_mobile {
-          width: 100% !important;
-          padding: 8px 0 !important;
-        }
-
-        #google_translate_mobile .goog-te-gadget {
-          width: 100% !important;
-        }
-
-        #google_translate_mobile .goog-te-combo {
-          width: 100% !important;
-          padding: 10px 12px !important;
-        }
       `;
       document.head.appendChild(style);
     }
   }, []);
-
-  // Initialize mobile translate widget when menu opens
-  useEffect(() => {
-    if (mobileMenuOpen && !mobileTranslateInit && window.google?.translate) {
-      // Wait a bit for the DOM to be ready
-      const timer = setTimeout(() => {
-        const mobileElement = document.getElementById('google_translate_mobile');
-        if (mobileElement && mobileElement.children.length === 0) {
-          new window.google.translate.TranslateElement(
-            {
-              pageLanguage: 'en',
-              includedLanguages: 'ar,de,en,ru,tr,zh-CN,es,fr',
-              layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
-              autoDisplay: false
-            },
-            'google_translate_mobile'
-          );
-          setMobileTranslateInit(true);
-        }
-      }, 100);
-
-      return () => clearTimeout(timer);
-    }
-  }, [mobileMenuOpen, mobileTranslateInit]);
 
   const navItems = [
     { path: "/", label: "Home" },
@@ -212,10 +185,24 @@ const Navigation = () => {
                 </Button>
               </a>
 
-              {/* Google Translate - Mobile */}
+              {/* Language Selector - Mobile */}
               <div className="pt-2 border-t border-border">
                 <p className="text-sm text-muted-foreground mb-2 mt-2">Language</p>
-                <div id="google_translate_mobile"></div>
+                <select
+                  onChange={handleMobileLanguageChange}
+                  className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground"
+                  defaultValue=""
+                >
+                  <option value="">Select Language</option>
+                  <option value="en">English</option>
+                  <option value="ar">العربية (Arabic)</option>
+                  <option value="de">Deutsch (German)</option>
+                  <option value="ru">Русский (Russian)</option>
+                  <option value="tr">Türkçe (Turkish)</option>
+                  <option value="zh-CN">中文 (Chinese)</option>
+                  <option value="es">Español (Spanish)</option>
+                  <option value="fr">Français (French)</option>
+                </select>
               </div>
             </div>
           </div>
