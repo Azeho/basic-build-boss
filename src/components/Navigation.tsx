@@ -75,6 +75,21 @@ const Navigation = () => {
           font-size: 14px !important;
           cursor: pointer !important;
         }
+
+        /* Mobile translate widget styling */
+        #google_translate_mobile {
+          width: 100% !important;
+          padding: 8px 0 !important;
+        }
+
+        #google_translate_mobile .goog-te-gadget {
+          width: 100% !important;
+        }
+
+        #google_translate_mobile .goog-te-combo {
+          width: 100% !important;
+          padding: 10px 12px !important;
+        }
       `;
       document.head.appendChild(style);
     }
@@ -184,7 +199,8 @@ const Navigation = () => {
               </a>
 
               {/* Google Translate - Mobile */}
-              <div className="pt-2">
+              <div className="pt-2 border-t border-border">
+                <p className="text-sm text-muted-foreground mb-2 mt-2">Language</p>
                 <div id="google_translate_mobile"></div>
               </div>
             </div>
