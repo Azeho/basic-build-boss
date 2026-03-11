@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Phone, Mail, Menu, X, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import logoImage from "@/assets/sungur-logo.png";
 import {
   Select,
@@ -14,35 +15,34 @@ import {
 const Navigation = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { t, i18n } = useTranslation();
 
   const languages = [
-    { code: "en", name: "English" },
-    { code: "ar", name: "العربية" },
-    { code: "ru", name: "Русский" },
-    { code: "tr", name: "Türkçe" },
-    { code: "zh", name: "中文" },
-    { code: "es", name: "Español" },
-    { code: "fr", name: "Français" },
-    { code: "de", name: "Deutsch" },
+    { code: "en", name: "English", nativeName: "English" },
+    { code: "ar", name: "Arabic", nativeName: "العربية" },
+    { code: "ru", name: "Russian", nativeName: "Русский" },
+    { code: "tr", name: "Turkish", nativeName: "Türkçe" },
+    { code: "zh", name: "Chinese", nativeName: "中文" },
+    { code: "es", name: "Spanish", nativeName: "Español" },
+    { code: "fr", name: "French", nativeName: "Français" },
+    { code: "de", name: "German", nativeName: "Deutsch" },
   ];
 
-  const translatePage = (targetLang: string) => {
-    if (targetLang === "en") {
-      // Reload original page
-      window.location.href = window.location.pathname;
-    } else {
-      // Use Yandex Translate
-      const currentUrl = encodeURIComponent(window.location.href);
-      window.location.href = `https://translate.yandex.com/translate?url=${currentUrl}&lang=en-${targetLang}`;
-    }
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+  };
+
+  const getCurrentLanguageName = () => {
+    const current = languages.find(lang => lang.code === i18n.language);
+    return current?.nativeName || "Language";
   };
 
   const navItems = [
-    { path: "/", label: "Home" },
-    { path: "/solutions", label: "Solutions" },
-    { path: "/industries", label: "Industries" },
-    { path: "/about", label: "About" },
-    { path: "/contacts", label: "Contacts" },
+    { path: "/", label: t('nav.home') },
+    { path: "/solutions", label: t('nav.solutions') },
+    { path: "/industries", label: t('nav.industries') },
+    { path: "/about", label: t('nav.about') },
+    { path: "/contacts", label: t('nav.contacts') },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -89,20 +89,20 @@ const Navigation = () => {
             <a href="mailto:info@sungur-electronics.com">
               <Button variant="default" size="sm">
                 <Mail className="h-4 w-4 mr-2" />
-                Contact
+                {t('nav.contact')}
               </Button>
             </a>
 
             {/* Language Selector */}
-            <Select onValueChange={translatePage}>
+            <Select onValueChange={changeLanguage} value={i18n.language}>
               <SelectTrigger className="w-[140px]">
                 <Languages className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Language" />
+                <SelectValue>{getCurrentLanguageName()}</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {languages.map((lang) => (
                   <SelectItem key={lang.code} value={lang.code}>
-                    {lang.name}
+                    {lang.nativeName}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -148,21 +148,21 @@ const Navigation = () => {
               <a href="mailto:info@sungur-electronics.com">
                 <Button variant="default" size="sm" className="w-full">
                   <Mail className="h-4 w-4 mr-2" />
-                  Contact
+                  {t('nav.contact')}
                 </Button>
               </a>
 
               {/* Mobile Language Selector */}
               <div className="pt-2">
-                <Select onValueChange={translatePage}>
+                <Select onValueChange={changeLanguage} value={i18n.language}>
                   <SelectTrigger className="w-full">
                     <Languages className="h-4 w-4 mr-2" />
-                    <SelectValue placeholder="Select Language" />
+                    <SelectValue>{getCurrentLanguageName()}</SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     {languages.map((lang) => (
                       <SelectItem key={lang.code} value={lang.code}>
-                        {lang.name}
+                        {lang.nativeName}
                       </SelectItem>
                     ))}
                   </SelectContent>
