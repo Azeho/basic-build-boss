@@ -4,74 +4,80 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import logoImage from "@/assets/sungur-logo.png";
 
+declare global {
+  interface Window {
+    googleTranslateElementInit: () => void;
+    google: any;
+  }
+}
+
 const Navigation = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    // Yandex Translate Widget Configuration
-    const script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.innerHTML = `
-      function YandexTranslateInit() {
-        if (typeof Ya !== 'undefined' && Ya.Translate) {
-          Ya.Translate.init({
-            lang: 'en-ar,en-ru,en-tr,en-zh,en-es,en-fr,en-de',
-            embedded: false,
-            autoMode: false
-          });
+    // EXACT implementation from arassa-meydan.com
+    window.googleTranslateElementInit = () => {
+      // Desktop widget
+      new window.google.translate.TranslateElement(
+        {
+          pageLanguage: 'en',
+          includedLanguages: 'ar,de,en,ru,tr,zh-CN,es,fr',
+          layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+          autoDisplay: false
+        },
+        'google_translate_element'
+      );
+
+      // Mobile widget
+      new window.google.translate.TranslateElement(
+        {
+          pageLanguage: 'en',
+          includedLanguages: 'ar,de,en,ru,tr,zh-CN,es,fr',
+          layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+          autoDisplay: false
+        },
+        'google_translate_mobile'
+      );
+    };
+
+    // Load Google Translate script - EXACT same way as arassa-meydan.com
+    if (!document.getElementById('google-translate-script')) {
+      const script = document.createElement('script');
+      script.id = 'google-translate-script';
+      script.type = 'text/javascript';
+      script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      document.body.appendChild(script);
+    }
+
+    // Minimal CSS - just to ensure body stays in place
+    if (!document.getElementById('gt-style')) {
+      const style = document.createElement('style');
+      style.id = 'gt-style';
+      style.textContent = `
+        body { top: 0px !important; }
+        .skiptranslate iframe { display: none !important; }
+
+        /* Hide Google branding */
+        .goog-te-gadget > span > a,
+        .goog-te-gadget > span,
+        .goog-logo-link,
+        .goog-te-gadget img {
+          display: none !important;
         }
-      }
-    `;
-    document.head.appendChild(script);
 
-    // Load Yandex Translate script
-    const yandexScript = document.createElement('script');
-    yandexScript.src = 'https://translate.yandex.net/website-widget/v1/widget.js?widgetId=ytWidget&pageLang=en&widgetTheme=light&autoMode=false';
-    yandexScript.async = true;
-    yandexScript.onload = () => {
-      // Initialize after script loads
-      if (typeof (window as any).YandexTranslateInit === 'function') {
-        (window as any).YandexTranslateInit();
-      }
-    };
-    document.body.appendChild(yandexScript);
-
-    // Style the Yandex widget
-    const style = document.createElement('style');
-    style.textContent = `
-      /* Style Yandex Translate widget */
-      .ya-page-js-inited .ya-translate-widget {
-        display: inline-block !important;
-      }
-
-      .ya-translate-widget select {
-        padding: 6px 12px !important;
-        border: 1px solid #e2e8f0 !important;
-        border-radius: 6px !important;
-        background: white !important;
-        color: #1e293b !important;
-        font-size: 14px !important;
-        cursor: pointer !important;
-        font-family: inherit !important;
-      }
-
-      .ya-translate-widget select:hover {
-        border-color: #3b82f6 !important;
-      }
-
-      /* Hide Yandex branding */
-      .ya-translate-widget .ya-brand {
-        display: none !important;
-      }
-    `;
-    document.head.appendChild(style);
-
-    return () => {
-      if (document.body.contains(yandexScript)) {
-        document.body.removeChild(yandexScript);
-      }
-    };
+        /* Style the dropdown */
+        .goog-te-combo {
+          padding: 6px 12px !important;
+          border: 1px solid #e2e8f0 !important;
+          border-radius: 6px !important;
+          background: white !important;
+          font-size: 14px !important;
+          cursor: pointer !important;
+        }
+      `;
+      document.head.appendChild(style);
+    }
   }, []);
 
   const navItems = [
@@ -130,8 +136,8 @@ const Navigation = () => {
               </Button>
             </a>
 
-            {/* Yandex Translate Widget - Desktop */}
-            <div id="ytWidget" className="notranslate"></div>
+            {/* Google Translate - Desktop */}
+            <div id="google_translate_element"></div>
           </div>
 
           {/* Mobile controls */}
@@ -177,9 +183,9 @@ const Navigation = () => {
                 </Button>
               </a>
 
-              {/* Yandex Translate Widget - Mobile */}
-              <div className="pt-2 notranslate">
-                <div id="ytWidget"></div>
+              {/* Google Translate - Mobile */}
+              <div className="pt-2">
+                <div id="google_translate_mobile"></div>
               </div>
             </div>
           </div>
