@@ -18,14 +18,26 @@ const Navigation = () => {
   // Custom language change handler for mobile
   const handleMobileLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const langCode = e.target.value;
-    if (langCode && window.google?.translate) {
-      // Find the Google Translate combo box and trigger it
-      const googleCombo = document.querySelector('.goog-te-combo') as HTMLSelectElement;
-      if (googleCombo) {
-        googleCombo.value = langCode;
-        googleCombo.dispatchEvent(new Event('change'));
-      }
+    if (!langCode) return;
+
+    // Method 1: Try to trigger the desktop widget
+    const googleCombo = document.querySelector('.goog-te-combo') as HTMLSelectElement;
+    if (googleCombo) {
+      googleCombo.value = langCode;
+      googleCombo.dispatchEvent(new Event('change', { bubbles: true }));
+      return;
     }
+
+    // Method 2: Use Google Translate's cookie method
+    const setCookie = (name: string, value: string, days: number) => {
+      const expires = new Date(Date.now() + days * 864e5).toUTCString();
+      document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+    };
+
+    // Set the Google Translate cookie and reload
+    setCookie('googtrans', `/en/${langCode}`, 1);
+    setCookie('googtrans', `/en/${langCode}`, 1); // Set twice for reliability
+    window.location.reload();
   };
 
   useEffect(() => {
