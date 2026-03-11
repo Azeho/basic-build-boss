@@ -14,6 +14,7 @@ declare global {
 const Navigation = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileTranslateInit, setMobileTranslateInit] = useState(false);
 
   useEffect(() => {
     // EXACT implementation from arassa-meydan.com
@@ -27,17 +28,6 @@ const Navigation = () => {
           autoDisplay: false
         },
         'google_translate_element'
-      );
-
-      // Mobile widget
-      new window.google.translate.TranslateElement(
-        {
-          pageLanguage: 'en',
-          includedLanguages: 'ar,de,en,ru,tr,zh-CN,es,fr',
-          layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
-          autoDisplay: false
-        },
-        'google_translate_mobile'
       );
     };
 
@@ -94,6 +84,30 @@ const Navigation = () => {
       document.head.appendChild(style);
     }
   }, []);
+
+  // Initialize mobile translate widget when menu opens
+  useEffect(() => {
+    if (mobileMenuOpen && !mobileTranslateInit && window.google?.translate) {
+      // Wait a bit for the DOM to be ready
+      const timer = setTimeout(() => {
+        const mobileElement = document.getElementById('google_translate_mobile');
+        if (mobileElement && mobileElement.children.length === 0) {
+          new window.google.translate.TranslateElement(
+            {
+              pageLanguage: 'en',
+              includedLanguages: 'ar,de,en,ru,tr,zh-CN,es,fr',
+              layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+              autoDisplay: false
+            },
+            'google_translate_mobile'
+          );
+          setMobileTranslateInit(true);
+        }
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, [mobileMenuOpen, mobileTranslateInit]);
 
   const navItems = [
     { path: "/", label: "Home" },
