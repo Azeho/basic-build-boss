@@ -18,7 +18,7 @@ declare global {
   }
 }
 
-const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || "6Le6soUsAAAAAOGuibG0IIEPUCmfGmS5DFMZRiVf";
+const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || "6Le6s0UsAAAAAOGuib60IIEPUCmfGmS5DFMZRiVf";
 
 const Contacts = () => {
   const [formData, setFormData] = useState({
