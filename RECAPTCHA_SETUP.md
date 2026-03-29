@@ -11,6 +11,8 @@ Create a `.env` file in the root directory (use `.env.example` as template):
 ```env
 VITE_RECAPTCHA_SITE_KEY=6Le6soUsAAAAAOGuibG0IIEPUCmfGmS5DFMZRiVf
 RECAPTCHA_SECRET_KEY=6Le6soUsAAAAAGgHcpDkoeu-fnfrno1mHdLvDeQF
+SENDGRID_API_KEY=your_sendgrid_api_key_here
+SENDGRID_FROM_EMAIL=noreply@sungur-electronics.com
 ```
 
 ### Deployment on Netlify
@@ -27,9 +29,11 @@ RECAPTCHA_SECRET_KEY=6Le6soUsAAAAAGgHcpDkoeu-fnfrno1mHdLvDeQF
 
 3. **Configure Environment Variables**
    - Go to Site settings → Environment variables
-   - Add both variables:
+   - Add all required variables:
      - `VITE_RECAPTCHA_SITE_KEY` = `6Le6soUsAAAAAOGuibG0IIEPUCmfGmS5DFMZRiVf`
      - `RECAPTCHA_SECRET_KEY` = `6Le6soUsAAAAAGgHcpDkoeu-fnfrno1mHdLvDeQF`
+     - `SENDGRID_API_KEY` = (your SendGrid API key - see SendGrid Setup below)
+     - `SENDGRID_FROM_EMAIL` = `noreply@sungur-electronics.com` (must be verified in SendGrid)
 
 4. **Deploy**
    - Build command: `npm run build`
@@ -80,31 +84,77 @@ This will run your site at `http://localhost:8888` with functions at `http://loc
 - ✅ **All verification happens server-side** - frontend just displays the widget
 - ✅ **Token is single-use** - automatically resets after submission
 
-## Extending the Function
+## SendGrid Setup (Email Delivery)
 
-The serverless function can be extended to:
+The contact form is now configured to send emails via SendGrid. Follow these steps to set it up:
 
-- **Send emails** using SendGrid, AWS SES, or nodemailer
-- **Save to database** (MongoDB, PostgreSQL, Airtable, etc.)
-- **Send notifications** to Slack, Discord, etc.
-- **Forward to CRM** (HubSpot, Salesforce, etc.)
+### 1. Create a SendGrid Account
 
-Example with SendGrid:
+1. Go to [SendGrid](https://sendgrid.com/) and sign up for a free account
+2. Free tier includes **100 emails per day** (perfect for contact forms)
+3. Verify your email address
 
-```typescript
-// In netlify/functions/verify-recaptcha.ts
-import sgMail from '@sendgrid/mail';
+### 2. Create an API Key
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
+1. Log into your SendGrid dashboard
+2. Go to **Settings** → **API Keys**
+3. Click **Create API Key**
+4. Name it (e.g., "Sungur Electronics Contact Form")
+5. Select **Restricted Access** and enable only:
+   - **Mail Send** → Full Access
+6. Click **Create & View**
+7. **IMPORTANT:** Copy the API key immediately (you won't see it again!)
 
-// After reCAPTCHA verification succeeds:
-await sgMail.send({
-  to: 'info@sungur-electronics.com',
-  from: 'noreply@sungur-electronics.com',
-  subject: `New Contact Form: ${formData.name}`,
-  text: `Name: ${formData.name}\nEmail: ${formData.email}\nMessage: ${formData.message}`,
-});
+### 3. Verify Sender Email (Required)
+
+SendGrid requires you to verify the email address you send from:
+
+1. Go to **Settings** → **Sender Authentication**
+2. Choose one of two options:
+
+   **Option A: Single Sender Verification (Easier)**
+   - Click **Verify a Single Sender**
+   - Add `noreply@sungur-electronics.com` or any email you own
+   - Check your inbox and click the verification link
+
+   **Option B: Domain Authentication (Recommended for production)**
+   - Click **Authenticate Your Domain**
+   - Follow the wizard to add DNS records to your domain
+   - This allows sending from any `@sungur-electronics.com` address
+
+### 4. Add Environment Variables
+
+Add these to your Netlify environment variables:
+
 ```
+SENDGRID_API_KEY=SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+SENDGRID_FROM_EMAIL=noreply@sungur-electronics.com
+```
+
+**Note:** The `SENDGRID_FROM_EMAIL` must match the email you verified in step 3.
+
+### 5. Deploy and Test
+
+1. Push your changes to trigger a new deployment
+2. Test the contact form on your live site
+3. Check that emails arrive at `info@sungur-electronics.com`
+
+### Troubleshooting Email Issues
+
+**Emails not arriving?**
+- Check SendGrid Activity feed (Dashboard → Activity)
+- Verify the `SENDGRID_FROM_EMAIL` is verified in SendGrid
+- Check spam folder
+- Look at Netlify function logs for errors
+
+**"sender not verified" error?**
+- You must verify the sender email in SendGrid (step 3)
+- Wait a few minutes after verification before testing
+
+**API key invalid?**
+- Double-check the API key in Netlify environment variables
+- Ensure there are no extra spaces or characters
+- The key should start with `SG.`
 
 ## Troubleshooting
 
