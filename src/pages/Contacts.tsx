@@ -85,7 +85,7 @@ const Contacts = () => {
       let backendVerified = false;
 
       try {
-        const response = await fetch('/api/verify-recaptcha', {
+        const response = await fetch('/.netlify/functions/verify-recaptcha', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
