@@ -3,6 +3,20 @@ import react from "@vitejs/plugin-react-swc";
 import legacy from "@vitejs/plugin-legacy";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
+import { copyFileSync } from "fs";
+
+// Plugin to copy .htaccess to dist folder after build
+const copyHtaccess = () => ({
+  name: 'copy-htaccess',
+  closeBundle() {
+    try {
+      copyFileSync('.htaccess', 'dist/.htaccess');
+      console.log('✓ Copied .htaccess to dist/');
+    } catch (error) {
+      console.warn('Warning: Could not copy .htaccess file:', error);
+    }
+  }
+});
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -19,6 +33,7 @@ export default defineConfig(({ mode }) => ({
       renderLegacyChunks: true,
       renderModernChunks: false,
     }),
+    copyHtaccess(),
   ].filter(Boolean),
   resolve: {
     alias: {
