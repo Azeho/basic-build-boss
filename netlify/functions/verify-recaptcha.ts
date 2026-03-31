@@ -70,8 +70,14 @@ const handler: Handler = async (event: HandlerEvent) => {
 
     // Send email via SendGrid
     const sendgridApiKey = process.env.SENDGRID_API_KEY;
-    if (!sendgridApiKey) {
-      console.error('SENDGRID_API_KEY is not set');
+    const sendgridFromEmail = process.env.SENDGRID_FROM_EMAIL || 'info@sungur-electronics.com';
+
+    if (!sendgridApiKey || sendgridApiKey === 'your_sendgrid_api_key_here') {
+      console.error('❌ SENDGRID_API_KEY is not configured in Netlify environment variables');
+      console.error('📧 Email will NOT be sent. Form data logged below:');
+      console.log('Form submission:', JSON.stringify(formData, null, 2));
+      console.error('⚠️  ACTION REQUIRED: Configure SendGrid in Netlify. See SENDGRID_SETUP.md');
+
       // Still return success to user, but log the error
       return {
         statusCode: 200,
@@ -86,10 +92,16 @@ const handler: Handler = async (event: HandlerEvent) => {
       sgMail.setApiKey(sendgridApiKey);
 
       const phoneInfo = formData?.phone ? `Phone: ${formData.phone}\n` : '';
+      const emailTo = 'info@sungur-electronics.com';
+
+      console.log('📧 Attempting to send email...');
+      console.log(`   From: ${sendgridFromEmail}`);
+      console.log(`   To: ${emailTo}`);
+      console.log(`   Subject: New Contact Form Submission from ${formData?.name || 'Unknown'}`);
 
       await sgMail.send({
-        to: 'info@sungur-electronics.com',
-        from: process.env.SENDGRID_FROM_EMAIL || 'info@sungur-electronics.com',
+        to: emailTo,
+        from: sendgridFromEmail,
         subject: `New Contact Form Submission from ${formData?.name || 'Unknown'}`,
         text: `You have received a new message from the contact form on sungur-electronics.com:
 
@@ -134,9 +146,35 @@ Submitted at: ${new Date().toISOString()}`,
         `,
       });
 
-      console.log('Email sent successfully to info@sungur-electronics.com');
-    } catch (emailError) {
-      console.error('Failed to send email:', emailError);
+      console.log('✅ Email sent successfully to info@sungur-electronics.com');
+      console.log('📬 Check the inbox for the message');
+    } catch (emailError: any) {
+      console.error('❌ Failed to send email via SendGrid');
+      console.error('Error details:', emailError);
+
+      if (emailError.response?.body) {
+        console.error('SendGrid response:', JSON.stringify(emailError.response.body, null, 2));
+
+        // Provide specific error guidance
+        const errorBody = emailError.response.body;
+        if (errorBody.errors) {
+          errorBody.errors.forEach((err: any) => {
+            if (err.message?.includes('does not contain a valid address')) {
+              console.error('⚠️  Sender email not verified in SendGrid');
+              console.error(`   Please verify ${sendgridFromEmail} in SendGrid Dashboard`);
+              console.error('   See SENDGRID_SETUP.md for instructions');
+            }
+            if (err.message?.includes('api key')) {
+              console.error('⚠️  Invalid SendGrid API key');
+              console.error('   Please check SENDGRID_API_KEY in Netlify environment variables');
+            }
+          });
+        }
+      }
+
+      console.error('⚠️  Form data was captured but email was NOT sent:');
+      console.log(JSON.stringify(formData, null, 2));
+
       // Still return success to user to avoid confusion
       // but log the error for debugging
     }
