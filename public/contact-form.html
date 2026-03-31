@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Form - Netlify Forms Detection</title>
+</head>
+<body>
+  <!--
+    This hidden form helps Netlify detect the form structure at build time.
+    Required for React SPAs using Netlify Forms.
+
+    The actual form is in src/pages/ContactsNetlifyForms.tsx
+    This file just tells Netlify what fields to expect.
+  -->
+  <form name="contact" netlify netlify-honeypot="bot-field" hidden>
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <input type="tel" name="phone" />
+    <textarea name="message"></textarea>
+    <input type="text" name="bot-field" />
+  </form>
+
+  <p>This is a hidden form for Netlify Forms detection. Please visit <a href="/">the homepage</a>.</p>
+</body>
+</html>
