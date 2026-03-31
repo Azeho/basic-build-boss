@@ -89,7 +89,7 @@ const handler: Handler = async (event: HandlerEvent) => {
 
       await sgMail.send({
         to: 'info@sungur-electronics.com',
-        from: process.env.SENDGRID_FROM_EMAIL || 'noreply@sungur-electronics.com',
+        from: process.env.SENDGRID_FROM_EMAIL || 'info@sungur-electronics.com',
         subject: `New Contact Form Submission from ${formData?.name || 'Unknown'}`,
         text: `You have received a new message from the contact form on sungur-electronics.com:
 

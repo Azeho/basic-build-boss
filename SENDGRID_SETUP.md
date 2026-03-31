@@ -43,11 +43,11 @@ You must verify the email address you'll send FROM.
 1. Go to **Settings** → **Sender Authentication**
 2. Click **"Verify a Single Sender"**
 3. Fill in:
-   - **From Email:** `noreply@sungur-electronics.com`
+   - **From Email:** `info@sungur-electronics.com`
    - **From Name:** `Sungur Electronics`
    - Fill in other required fields
 4. Click **"Create"**
-5. **Check your inbox** (`noreply@sungur-electronics.com`) for verification email
+5. **Check your inbox** (`info@sungur-electronics.com`) for verification email
 6. Click the verification link
 
 ### Option B: Domain Authentication (Better for production)
@@ -75,7 +75,7 @@ You must verify the email address you'll send FROM.
    **Variable 2:**
    ```
    Key: SENDGRID_FROM_EMAIL
-   Value: noreply@sungur-electronics.com (must match verified email from Step 3)
+   Value: info@sungur-electronics.com (must match verified email from Step 3)
    ```
 
 4. **Save** the variables
@@ -142,7 +142,7 @@ After verification, wait 2-3 minutes and try again.
 When properly configured, the contact form will:
 
 ✅ Send email **TO:** `info@sungur-electronics.com`
-✅ Send email **FROM:** `noreply@sungur-electronics.com` (or your verified email)
+✅ Send email **FROM:** `info@sungur-electronics.com` (your verified email)
 ✅ Include all form fields (name, email, phone, message)
 ✅ Include both plain text and HTML formatted email
 ✅ Show timestamp in Ashgabat timezone
