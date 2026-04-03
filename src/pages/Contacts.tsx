@@ -5,20 +5,21 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Phone, Mail, MapPin, Clock, CheckCircle } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import mitelLogo from "@/assets/mitel.jpg";
 
-declare global {
-  interface Window {
-    grecaptcha: {
-      ready: (callback: () => void) => void;
-      render: (container: string | HTMLElement, options: { sitekey: string; callback: (token: string) => void }) => number;
-      reset: (widgetId?: number) => void;
-    };
-  }
-}
-
-const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || "6Le6s0UsAAAAAOGuib60IIEPUCmfGmS5DFMZRiVf";
+/**
+ * SIMPLIFIED Contact Form using Netlify Forms
+ *
+ * NO API KEYS NEEDED!
+ * NO SENDGRID SETUP REQUIRED!
+ *
+ * Just deploy and configure email notification in Netlify Dashboard:
+ * 1. Netlify Dashboard → Site settings → Forms
+ * 2. Add notification → Email notification
+ * 3. Enter: info@sungur-electronics.com
+ * 4. Done!
+ */
 
 const Contacts = () => {
   const [formData, setFormData] = useState({
@@ -29,118 +30,43 @@ const Contacts = () => {
   });
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState("");
-  const [recaptchaToken, setRecaptchaToken] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const recaptchaRef = useRef<HTMLDivElement>(null);
-  const recaptchaWidgetId = useRef<number | null>(null);
-
-  // Load reCAPTCHA script
-  useEffect(() => {
-    if (!document.getElementById("recaptcha-script")) {
-      const script = document.createElement("script");
-      script.id = "recaptcha-script";
-      script.src = "https://www.google.com/recaptcha/api.js?render=explicit";
-      script.async = true;
-      script.defer = true;
-      document.body.appendChild(script);
-    }
-
-    // Render reCAPTCHA widget when ready
-    const renderRecaptcha = () => {
-      if (window.grecaptcha && recaptchaRef.current && recaptchaWidgetId.current === null) {
-        window.grecaptcha.ready(() => {
-          recaptchaWidgetId.current = window.grecaptcha.render(recaptchaRef.current!, {
-            sitekey: RECAPTCHA_SITE_KEY,
-            callback: (token: string) => {
-              setRecaptchaToken(token);
-            },
-          });
-        });
-      }
-    };
-
-    // Poll for grecaptcha availability
-    const interval = setInterval(() => {
-      if (window.grecaptcha) {
-        renderRecaptcha();
-        clearInterval(interval);
-      }
-    }, 100);
-
-    return () => clearInterval(interval);
-  }, []);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!recaptchaToken) {
-      alert("Please complete the reCAPTCHA verification");
-      return;
-    }
-
     setIsSubmitting(true);
 
     try {
-      // Try to verify with backend if available
-      let backendVerified = false;
+      // Encode form data for Netlify
+      const formBody = new FormData();
+      formBody.append('form-name', 'contact');
+      formBody.append('name', formData.name);
+      formBody.append('email', formData.email);
+      formBody.append('phone', formData.phone);
+      formBody.append('message', formData.message);
 
-      try {
-        const response = await fetch('/.netlify/functions/verify-recaptcha', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            token: recaptchaToken,
-            formData: formData,
-          }),
-        });
-
-        // Check if response is JSON
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-          const data = await response.json();
-
-          if (response.ok && data.success) {
-            backendVerified = true;
-          }
-        }
-      } catch (backendError) {
-        // Backend not available - fall back to client-side only
-        console.log('Backend verification not available, proceeding with client-side validation');
-      }
-
-      // Track submission (with or without backend verification)
-      console.log('Contact form submitted:', {
-        timestamp: new Date().toISOString(),
-        formData: formData,
-        recaptchaCompleted: true,
-        backendVerified: backendVerified,
+      // Submit to Netlify Forms
+      const response = await fetch('/', {
+        method: 'POST',
+        body: formBody,
       });
 
-      // Store email for confirmation dialog
-      setSubmittedEmail(formData.email);
+      if (response.ok) {
+        // Store email for confirmation dialog
+        setSubmittedEmail(formData.email);
 
-      // Show success modal
-      setShowSuccessDialog(true);
+        // Show success modal
+        setShowSuccessDialog(true);
 
-      // Clear form
-      setFormData({ name: "", email: "", phone: "", message: "" });
-
-      // Reset reCAPTCHA
-      setRecaptchaToken("");
-      if (window.grecaptcha && recaptchaWidgetId.current !== null) {
-        window.grecaptcha.reset(recaptchaWidgetId.current);
+        // Clear form
+        setFormData({ name: "", email: "", phone: "", message: "" });
+      } else {
+        throw new Error('Form submission failed');
       }
     } catch (error) {
       console.error('Form submission error:', error);
-      alert('Failed to submit form. Please try again.');
-
-      // Reset reCAPTCHA on error
-      setRecaptchaToken("");
-      if (window.grecaptcha && recaptchaWidgetId.current !== null) {
-        window.grecaptcha.reset(recaptchaWidgetId.current);
-      }
+      alert('Failed to submit form. Please try again or email us directly at info@sungur-electronics.com');
     } finally {
       setIsSubmitting(false);
     }
@@ -188,11 +114,38 @@ const Contacts = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div>
             <h2 className="text-3xl font-bold mb-8">Send Us a Message</h2>
-            <form onSubmit={handleSubmit} className="space-y-6">
+
+            {/*
+              Netlify Forms require:
+              1. name="contact" attribute on form
+              2. data-netlify="true" attribute
+              3. Hidden input with form-name
+              4. method="post"
+            */}
+            <form
+              ref={formRef}
+              name="contact"
+              method="post"
+              data-netlify="true"
+              netlify-honeypot="bot-field"
+              onSubmit={handleSubmit}
+              className="space-y-6"
+            >
+              {/* Hidden fields for Netlify */}
+              <input type="hidden" name="form-name" value="contact" />
+
+              {/* Honeypot field for spam protection */}
+              <div style={{ display: 'none' }}>
+                <label>
+                  Don't fill this out if you're human: <input name="bot-field" />
+                </label>
+              </div>
+
               <div>
                 <Label htmlFor="name">Name *</Label>
                 <Input
                   id="name"
+                  name="name"
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -205,6 +158,7 @@ const Contacts = () => {
                 <Label htmlFor="email">Email *</Label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   required
                   value={formData.email}
@@ -218,6 +172,7 @@ const Contacts = () => {
                 <Label htmlFor="phone">Phone</Label>
                 <Input
                   id="phone"
+                  name="phone"
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -230,6 +185,7 @@ const Contacts = () => {
                 <Label htmlFor="message">Message *</Label>
                 <Textarea
                   id="message"
+                  name="message"
                   required
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
@@ -239,14 +195,13 @@ const Contacts = () => {
                 />
               </div>
 
-              <div>
-                <Label>Verification *</Label>
-                <div ref={recaptchaRef} className="mt-2" />
-              </div>
-
-              <Button type="submit" size="lg" className="w-full" disabled={!recaptchaToken || isSubmitting}>
+              <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
                 {isSubmitting ? "Sending..." : "Send Message"}
               </Button>
+
+              <p className="text-sm text-muted-foreground text-center">
+                ✨ Powered by Netlify Forms - No API keys required!
+              </p>
             </form>
           </div>
 
