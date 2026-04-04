@@ -1,0 +1,218 @@
+================================================================================
+DNS RECORDS FOR SUNGUR-ELECTRONICS.COM
+Email Reputation & Deliverability Setup
+================================================================================
+
+INSTRUCTIONS:
+1. Get your server IP: curl ifconfig.me
+2. Replace YOUR_SERVER_IP below with your actual IP
+3. Add these records to your DNS provider (registrar/hosting control panel)
+4. Wait 24-48 hours for DNS propagation
+5. Test at: mail-tester.com and mxtoolbox.com
+
+================================================================================
+REQUIRED DNS RECORDS
+================================================================================
+
+1. SPF RECORD (Sender Policy Framework)
+   ----------------------------------------
+   Type:  TXT
+   Host:  @ (or sungur-electronics.com)
+   Value: v=spf1 ip4:YOUR_SERVER_IP a mx ~all
+   TTL:   3600
+
+   Example: v=spf1 ip4:209.59.213.25 a mx ~all
+
+
+2. DMARC RECORD (Email Authentication)
+   ----------------------------------------
+   Type:  TXT
+   Host:  _dmarc
+   Value: v=DMARC1; p=quarantine; rua=mailto:postmaster@sungur-electronics.com; pct=100
+   TTL:   3600
+
+   For testing first, use: v=DMARC1; p=none; rua=mailto:postmaster@sungur-electronics.com
+
+
+3. MX RECORD (Mail Exchange) - if not already set
+   ----------------------------------------
+   Type:     MX
+   Host:     @ (or sungur-electronics.com)
+   Value:    mail.sungur-electronics.com
+   Priority: 10
+   TTL:      3600
+
+
+4. A RECORD for mail subdomain - if not already set
+   ----------------------------------------
+   Type:  A
+   Host:  mail
+   Value: YOUR_SERVER_IP
+   TTL:   3600
+
+
+5. REVERSE DNS / PTR RECORD
+   ----------------------------------------
+   ** Contact your hosting provider/VPS provider **
+
+   Request: "Please set up reverse DNS (PTR record) for my server"
+   Details: IP YOUR_SERVER_IP should point to mail.sungur-electronics.com
+
+   Example request email:
+   "Hello, I need reverse DNS configured for my server.
+    Server IP: YOUR_SERVER_IP
+    Should resolve to: mail.sungur-electronics.com
+    Thank you!"
+
+
+6. DKIM RECORD (Optional but highly recommended)
+   ----------------------------------------
+   ** First generate DKIM keys on your server **
+
+   Run these commands on your server:
+
+   sudo apt-get install opendkim opendkim-tools -y
+   sudo mkdir -p /etc/opendkim/keys/sungur-electronics.com
+   cd /etc/opendkim/keys/sungur-electronics.com
+   sudo opendkim-genkey -s default -d sungur-electronics.com
+   sudo cat default.txt
+
+   Then add the DNS record shown in default.txt:
+
+   Type:  TXT
+   Host:  default._domainkey
+   Value: v=DKIM1; k=rsa; p=YOUR_GENERATED_PUBLIC_KEY_HERE
+   TTL:   3600
+
+
+================================================================================
+QUICK COPY-PASTE TEMPLATE (Replace YOUR_SERVER_IP with actual IP)
+================================================================================
+
+DNS Record 1:
+Type: TXT
+Name: @
+Value: v=spf1 ip4:YOUR_SERVER_IP a mx ~all
+
+DNS Record 2:
+Type: TXT
+Name: _dmarc
+Value: v=DMARC1; p=quarantine; rua=mailto:postmaster@sungur-electronics.com; pct=100
+
+DNS Record 3:
+Type: MX
+Name: @
+Value: mail.sungur-electronics.com
+Priority: 10
+
+DNS Record 4:
+Type: A
+Name: mail
+Value: YOUR_SERVER_IP
+
+
+================================================================================
+VERIFICATION COMMANDS (Run after DNS propagation)
+================================================================================
+
+Check SPF:
+dig TXT sungur-electronics.com +short | grep spf
+
+Check DMARC:
+dig TXT _dmarc.sungur-electronics.com +short
+
+Check MX:
+dig MX sungur-electronics.com +short
+
+Check Reverse DNS (replace with your IP):
+dig -x YOUR_SERVER_IP +short
+
+Check DKIM (after setup):
+dig TXT default._domainkey.sungur-electronics.com +short
+
+
+================================================================================
+TESTING CHECKLIST
+================================================================================
+
+After adding all records:
+
+[ ] Wait 24-48 hours for DNS propagation
+[ ] Run verification commands above
+[ ] Test at https://www.mail-tester.com (aim for 10/10 score)
+[ ] Test at https://mxtoolbox.com/SuperTool.aspx
+[ ] Check blacklist status at https://mxtoolbox.com/blacklists.aspx
+[ ] Send test email to check-auth@verifier.port25.com
+[ ] Send real test from contact form
+[ ] Check inbox (not spam folder)
+
+
+================================================================================
+COMMON DNS PROVIDERS - WHERE TO ADD RECORDS
+================================================================================
+
+Cloudflare:
+1. Login to cloudflare.com
+2. Select your domain
+3. Go to DNS tab
+4. Click "Add record"
+
+Namecheap:
+1. Login to namecheap.com
+2. Domain List → Manage
+3. Advanced DNS tab
+4. Add New Record
+
+GoDaddy:
+1. Login to godaddy.com
+2. My Products → DNS
+3. Add → Select record type
+
+cPanel:
+1. Login to cPanel
+2. Zone Editor
+3. Manage → Add Record
+
+Plesk:
+1. Login to Plesk
+2. Websites & Domains
+3. DNS Settings
+4. Add Record
+
+
+================================================================================
+PRIORITY ORDER (Do these first)
+================================================================================
+
+ESSENTIAL (Do immediately):
+1. ✅ Add SPF record
+2. ✅ Add DMARC record (start with p=none for testing)
+3. ✅ Request reverse DNS from hosting provider
+
+HIGHLY RECOMMENDED (Within 1 week):
+4. 🚀 Set up DKIM signing
+5. 🚀 Add MX and mail.subdomain A records
+
+ONGOING:
+6. 📊 Monitor DMARC reports
+7. 📊 Test email deliverability monthly
+8. 📊 Check blacklist status regularly
+
+
+================================================================================
+NEED HELP?
+================================================================================
+
+Run the automated checker:
+./email-reputation-setup.sh
+
+Read the full guide:
+cat DOMAIN-REPUTATION-GUIDE.md
+
+Test your setup:
+https://www.mail-tester.com
+https://mxtoolbox.com
+
+Contact your DNS provider's support if you need help adding records.
+
+================================================================================
