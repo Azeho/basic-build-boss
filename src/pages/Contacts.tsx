@@ -5,20 +5,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Phone, Mail, MapPin, Clock, CheckCircle } from "lucide-react";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import mitelLogo from "@/assets/mitel.jpg";
 
 /**
- * SIMPLIFIED Contact Form using Netlify Forms
+ * Contact Form
  *
- * NO API KEYS NEEDED!
- * NO SENDGRID SETUP REQUIRED!
- *
- * Just deploy and configure email notification in Netlify Dashboard:
- * 1. Netlify Dashboard → Site settings → Forms
- * 2. Add notification → Email notification
- * 3. Enter: info@sungur-electronics.com
- * 4. Done!
+ * Note: This form displays contact information and allows users to reach out
+ * via direct email or phone. To enable form submission functionality,
+ * you'll need to implement your own backend endpoint.
  */
 
 const Contacts = () => {
@@ -30,46 +25,28 @@ const Contacts = () => {
   });
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const formRef = useRef<HTMLFormElement>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
 
-    try {
-      // Encode form data for Netlify
-      const formBody = new FormData();
-      formBody.append('form-name', 'contact');
-      formBody.append('name', formData.name);
-      formBody.append('email', formData.email);
-      formBody.append('phone', formData.phone);
-      formBody.append('message', formData.message);
+    // Create mailto link with form data
+    const subject = encodeURIComponent(`Contact Form: Message from ${formData.name}`);
+    const body = encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\n\nMessage:\n${formData.message}`
+    );
+    const mailtoLink = `mailto:info@sungur-electronics.com?subject=${subject}&body=${body}`;
 
-      // Submit to Netlify Forms
-      const response = await fetch('/', {
-        method: 'POST',
-        body: formBody,
-      });
+    // Open default email client
+    window.location.href = mailtoLink;
 
-      if (response.ok) {
-        // Store email for confirmation dialog
-        setSubmittedEmail(formData.email);
+    // Store email for confirmation dialog
+    setSubmittedEmail(formData.email);
 
-        // Show success modal
-        setShowSuccessDialog(true);
+    // Show success modal
+    setShowSuccessDialog(true);
 
-        // Clear form
-        setFormData({ name: "", email: "", phone: "", message: "" });
-      } else {
-        throw new Error('Form submission failed');
-      }
-    } catch (error) {
-      console.error('Form submission error:', error);
-      alert('Failed to submit form. Please try again or email us directly at info@sungur-electronics.com');
-    } finally {
-      setIsSubmitting(false);
-    }
+    // Clear form
+    setFormData({ name: "", email: "", phone: "", message: "" });
   };
 
   const contactInfo = [
@@ -115,31 +92,10 @@ const Contacts = () => {
           <div>
             <h2 className="text-3xl font-bold mb-8">Send Us a Message</h2>
 
-            {/*
-              Netlify Forms require:
-              1. name="contact" attribute on form
-              2. data-netlify="true" attribute
-              3. Hidden input with form-name
-              4. method="post"
-            */}
             <form
-              ref={formRef}
-              name="contact"
-              method="post"
-              data-netlify="true"
-              netlify-honeypot="bot-field"
               onSubmit={handleSubmit}
               className="space-y-6"
             >
-              {/* Hidden fields for Netlify */}
-              <input type="hidden" name="form-name" value="contact" />
-
-              {/* Honeypot field for spam protection */}
-              <div style={{ display: 'none' }}>
-                <label>
-                  Don't fill this out if you're human: <input name="bot-field" />
-                </label>
-              </div>
 
               <div>
                 <Label htmlFor="name">Name *</Label>
@@ -195,12 +151,12 @@ const Contacts = () => {
                 />
               </div>
 
-              <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? "Sending..." : "Send Message"}
+              <Button type="submit" size="lg" className="w-full">
+                Send Message
               </Button>
 
               <p className="text-sm text-muted-foreground text-center">
-                ✨ Powered by Netlify Forms - No API keys required!
+                This will open your default email client
               </p>
             </form>
           </div>
