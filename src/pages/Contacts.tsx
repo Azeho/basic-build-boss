@@ -37,13 +37,16 @@ const Contacts = () => {
     setErrorMessage("");
 
     try {
-      // Get reCAPTCHA token
-      const recaptchaToken = recaptchaRef.current ? await recaptchaRef.current.executeAsync() : null;
+      // Get reCAPTCHA token only if properly configured
+      let recaptchaToken = null;
 
-      if (!recaptchaToken && recaptchaSiteKey) {
-        setErrorMessage('Please complete the reCAPTCHA verification.');
-        setIsSubmitting(false);
-        return;
+      if (recaptchaSiteKey && recaptchaSiteKey !== 'your_recaptcha_site_key_here' && recaptchaRef.current) {
+        try {
+          recaptchaToken = await recaptchaRef.current.executeAsync();
+        } catch (error) {
+          console.warn('reCAPTCHA validation skipped:', error);
+          // Continue without reCAPTCHA if it fails
+        }
       }
 
       const response = await fetch('/contact.php', {
