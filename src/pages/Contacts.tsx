@@ -37,15 +37,16 @@ const Contacts = () => {
     setErrorMessage("");
 
     try {
-      // Get reCAPTCHA token only if properly configured
+      // Get reCAPTCHA token if configured
       let recaptchaToken = null;
 
-      if (recaptchaSiteKey && recaptchaSiteKey !== 'your_recaptcha_site_key_here' && recaptchaRef.current) {
-        try {
-          recaptchaToken = await recaptchaRef.current.executeAsync();
-        } catch (error) {
-          console.warn('reCAPTCHA validation skipped:', error);
-          // Continue without reCAPTCHA if it fails
+      if (recaptchaSiteKey && recaptchaSiteKey !== 'your_recaptcha_site_key_here') {
+        recaptchaToken = recaptchaRef.current?.getValue();
+
+        if (!recaptchaToken) {
+          setErrorMessage('Please complete the reCAPTCHA verification.');
+          setIsSubmitting(false);
+          return;
         }
       }
 
@@ -192,7 +193,6 @@ const Contacts = () => {
                 <div className="flex justify-center">
                   <ReCAPTCHA
                     ref={recaptchaRef}
-                    size="invisible"
                     sitekey={recaptchaSiteKey}
                   />
                 </div>
