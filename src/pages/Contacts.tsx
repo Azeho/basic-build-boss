@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Phone, Mail, MapPin, Clock, CheckCircle } from "lucide-react";
 import { useState, useRef } from "react";
@@ -16,13 +18,133 @@ import mitelLogo from "@/assets/mitel.jpg";
  * Make sure your server has PHP mail() function configured properly.
  */
 
+// Popular country codes
+const countryCodes = [
+  { code: "+1", country: "US/CA" },
+  { code: "+7", country: "RU/KZ" },
+  { code: "+20", country: "EG" },
+  { code: "+27", country: "ZA" },
+  { code: "+30", country: "GR" },
+  { code: "+31", country: "NL" },
+  { code: "+32", country: "BE" },
+  { code: "+33", country: "FR" },
+  { code: "+34", country: "ES" },
+  { code: "+36", country: "HU" },
+  { code: "+39", country: "IT" },
+  { code: "+40", country: "RO" },
+  { code: "+41", country: "CH" },
+  { code: "+43", country: "AT" },
+  { code: "+44", country: "UK" },
+  { code: "+45", country: "DK" },
+  { code: "+46", country: "SE" },
+  { code: "+47", country: "NO" },
+  { code: "+48", country: "PL" },
+  { code: "+49", country: "DE" },
+  { code: "+51", country: "PE" },
+  { code: "+52", country: "MX" },
+  { code: "+53", country: "CU" },
+  { code: "+54", country: "AR" },
+  { code: "+55", country: "BR" },
+  { code: "+56", country: "CL" },
+  { code: "+57", country: "CO" },
+  { code: "+58", country: "VE" },
+  { code: "+60", country: "MY" },
+  { code: "+61", country: "AU" },
+  { code: "+62", country: "ID" },
+  { code: "+63", country: "PH" },
+  { code: "+64", country: "NZ" },
+  { code: "+65", country: "SG" },
+  { code: "+66", country: "TH" },
+  { code: "+81", country: "JP" },
+  { code: "+82", country: "KR" },
+  { code: "+84", country: "VN" },
+  { code: "+86", country: "CN" },
+  { code: "+90", country: "TR" },
+  { code: "+91", country: "IN" },
+  { code: "+92", country: "PK" },
+  { code: "+93", country: "AF" },
+  { code: "+94", country: "LK" },
+  { code: "+95", country: "MM" },
+  { code: "+98", country: "IR" },
+  { code: "+212", country: "MA" },
+  { code: "+213", country: "DZ" },
+  { code: "+216", country: "TN" },
+  { code: "+218", country: "LY" },
+  { code: "+220", country: "GM" },
+  { code: "+221", country: "SN" },
+  { code: "+234", country: "NG" },
+  { code: "+249", country: "SD" },
+  { code: "+251", country: "ET" },
+  { code: "+254", country: "KE" },
+  { code: "+255", country: "TZ" },
+  { code: "+256", country: "UG" },
+  { code: "+351", country: "PT" },
+  { code: "+352", country: "LU" },
+  { code: "+353", country: "IE" },
+  { code: "+354", country: "IS" },
+  { code: "+355", country: "AL" },
+  { code: "+358", country: "FI" },
+  { code: "+359", country: "BG" },
+  { code: "+370", country: "LT" },
+  { code: "+371", country: "LV" },
+  { code: "+372", country: "EE" },
+  { code: "+373", country: "MD" },
+  { code: "+374", country: "AM" },
+  { code: "+375", country: "BY" },
+  { code: "+376", country: "AD" },
+  { code: "+377", country: "MC" },
+  { code: "+378", country: "SM" },
+  { code: "+380", country: "UA" },
+  { code: "+381", country: "RS" },
+  { code: "+382", country: "ME" },
+  { code: "+385", country: "HR" },
+  { code: "+386", country: "SI" },
+  { code: "+387", country: "BA" },
+  { code: "+389", country: "MK" },
+  { code: "+420", country: "CZ" },
+  { code: "+421", country: "SK" },
+  { code: "+423", country: "LI" },
+  { code: "+850", country: "KP" },
+  { code: "+852", country: "HK" },
+  { code: "+853", country: "MO" },
+  { code: "+855", country: "KH" },
+  { code: "+856", country: "LA" },
+  { code: "+880", country: "BD" },
+  { code: "+886", country: "TW" },
+  { code: "+960", country: "MV" },
+  { code: "+961", country: "LB" },
+  { code: "+962", country: "JO" },
+  { code: "+963", country: "SY" },
+  { code: "+964", country: "IQ" },
+  { code: "+965", country: "KW" },
+  { code: "+966", country: "SA" },
+  { code: "+967", country: "YE" },
+  { code: "+968", country: "OM" },
+  { code: "+970", country: "PS" },
+  { code: "+971", country: "AE" },
+  { code: "+972", country: "IL" },
+  { code: "+973", country: "BH" },
+  { code: "+974", country: "QA" },
+  { code: "+975", country: "BT" },
+  { code: "+976", country: "MN" },
+  { code: "+977", country: "NP" },
+  { code: "+992", country: "TJ" },
+  { code: "+993", country: "TM" },
+  { code: "+994", country: "AZ" },
+  { code: "+995", country: "GE" },
+  { code: "+996", country: "KG" },
+  { code: "+998", country: "UZ" },
+];
+
 const Contacts = () => {
   const recaptchaRef = useRef<ReCAPTCHA>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    countryCode: "+993",
     phone: "",
     message: "",
+    sendCopy: false,
   });
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState("");
@@ -71,7 +193,7 @@ const Contacts = () => {
         setShowSuccessDialog(true);
 
         // Clear form
-        setFormData({ name: "", email: "", phone: "", message: "" });
+        setFormData({ name: "", email: "", countryCode: "+993", phone: "", message: "", sendCopy: false });
 
         // Reset reCAPTCHA
         recaptchaRef.current?.reset();
@@ -164,15 +286,32 @@ const Contacts = () => {
 
               <div>
                 <Label htmlFor="phone">Phone</Label>
-                <Input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  placeholder="+993 12 97-43-33"
-                  className="mt-2"
-                />
+                <div className="flex gap-2 mt-2">
+                  <Select
+                    value={formData.countryCode}
+                    onValueChange={(value) => setFormData({ ...formData, countryCode: value })}
+                  >
+                    <SelectTrigger className="w-[130px]">
+                      <SelectValue placeholder="Code" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {countryCodes.map((item) => (
+                        <SelectItem key={item.code} value={item.code}>
+                          {item.code} {item.country}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    placeholder="12 97-43-33"
+                    className="flex-1"
+                  />
+                </div>
               </div>
 
               <div>
@@ -187,6 +326,20 @@ const Contacts = () => {
                   rows={5}
                   className="mt-2"
                 />
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="sendCopy"
+                  checked={formData.sendCopy}
+                  onCheckedChange={(checked) => setFormData({ ...formData, sendCopy: checked === true })}
+                />
+                <Label
+                  htmlFor="sendCopy"
+                  className="text-sm font-normal cursor-pointer"
+                >
+                  Send a copy of this message to my email
+                </Label>
               </div>
 
               {recaptchaSiteKey && recaptchaSiteKey !== 'your_recaptcha_site_key_here' && (

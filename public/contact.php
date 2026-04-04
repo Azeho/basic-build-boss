@@ -71,8 +71,11 @@ if (empty($data['name']) || empty($data['email']) || empty($data['message'])) {
 // Sanitize inputs
 $name = htmlspecialchars(strip_tags($data['name']));
 $email = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
-$phone = !empty($data['phone']) ? htmlspecialchars(strip_tags($data['phone'])) : 'Not provided';
+$countryCode = !empty($data['countryCode']) ? htmlspecialchars(strip_tags($data['countryCode'])) : '';
+$phoneNumber = !empty($data['phone']) ? htmlspecialchars(strip_tags($data['phone'])) : '';
+$phone = ($countryCode && $phoneNumber) ? $countryCode . ' ' . $phoneNumber : ($phoneNumber ? $phoneNumber : 'Not provided');
 $message = htmlspecialchars(strip_tags($data['message']));
+$sendCopy = !empty($data['sendCopy']) && $data['sendCopy'] === true;
 
 // Validate email
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -105,6 +108,32 @@ $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
 $mailSent = mail($to, $subject, $emailBody, $headers);
 
 if ($mailSent) {
+    // Send copy to sender if requested
+    if ($sendCopy) {
+        $senderSubject = 'Copy of your message to Sungur Electronics';
+        $senderBody = "Dear " . $name . ",\n\n";
+        $senderBody .= "This is a copy of the message you sent to Sungur Electronics.\n\n";
+        $senderBody .= "---\n\n";
+        $senderBody .= "Name: " . $name . "\n";
+        $senderBody .= "Email: " . $email . "\n";
+        $senderBody .= "Phone: " . $phone . "\n\n";
+        $senderBody .= "Message:\n" . $message . "\n\n";
+        $senderBody .= "---\n\n";
+        $senderBody .= "We have received your message and will get back to you soon.\n\n";
+        $senderBody .= "Best regards,\n";
+        $senderBody .= "Sungur Electronics Team\n";
+        $senderBody .= "info@sungur-electronics.com";
+
+        $senderHeaders = "From: info@sungur-electronics.com\r\n";
+        $senderHeaders .= "Reply-To: info@sungur-electronics.com\r\n";
+        $senderHeaders .= "X-Mailer: PHP/" . phpversion() . "\r\n";
+        $senderHeaders .= "MIME-Version: 1.0\r\n";
+        $senderHeaders .= "Content-Type: text/plain; charset=UTF-8\r\n";
+
+        // Send copy to sender (we don't check if this fails, as the main email was sent)
+        mail($email, $senderSubject, $senderBody, $senderHeaders);
+    }
+
     http_response_code(200);
     echo json_encode([
         'success' => true,
