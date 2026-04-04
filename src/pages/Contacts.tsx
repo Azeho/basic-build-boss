@@ -5,7 +5,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Phone, Mail, MapPin, Clock, CheckCircle } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import mitelLogo from "@/assets/mitel.jpg";
 
 /**
@@ -16,6 +17,7 @@ import mitelLogo from "@/assets/mitel.jpg";
  */
 
 const Contacts = () => {
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -27,18 +29,32 @@ const Contacts = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setErrorMessage("");
 
     try {
+      // Get reCAPTCHA token
+      const recaptchaToken = recaptchaRef.current ? await recaptchaRef.current.executeAsync() : null;
+
+      if (!recaptchaToken && recaptchaSiteKey) {
+        setErrorMessage('Please complete the reCAPTCHA verification.');
+        setIsSubmitting(false);
+        return;
+      }
+
       const response = await fetch('/contact.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          recaptchaToken,
+        }),
       });
 
       const result = await response.json();
@@ -52,11 +68,16 @@ const Contacts = () => {
 
         // Clear form
         setFormData({ name: "", email: "", phone: "", message: "" });
+
+        // Reset reCAPTCHA
+        recaptchaRef.current?.reset();
       } else {
         setErrorMessage(result.message || 'Failed to send message. Please try again.');
+        recaptchaRef.current?.reset();
       }
     } catch (error) {
       setErrorMessage('Failed to send message. Please try again or contact us directly at info@sungur-electronics.com');
+      recaptchaRef.current?.reset();
     } finally {
       setIsSubmitting(false);
     }
@@ -163,6 +184,16 @@ const Contacts = () => {
                   className="mt-2"
                 />
               </div>
+
+              {recaptchaSiteKey && recaptchaSiteKey !== 'your_recaptcha_site_key_here' && (
+                <div className="flex justify-center">
+                  <ReCAPTCHA
+                    ref={recaptchaRef}
+                    size="invisible"
+                    sitekey={recaptchaSiteKey}
+                  />
+                </div>
+              )}
 
               {errorMessage && (
                 <div className="p-4 bg-destructive/10 border border-destructive text-destructive rounded-md">

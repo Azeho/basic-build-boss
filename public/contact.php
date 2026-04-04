@@ -18,9 +18,48 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit();
 }
 
+// reCAPTCHA Secret Key - IMPORTANT: Add your secret key here or use environment variable
+// Get your secret key from: https://www.google.com/recaptcha/admin
+$recaptchaSecret = getenv('RECAPTCHA_SECRET_KEY') ?: 'your_recaptcha_secret_key_here';
+
 // Get JSON input
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
+
+// Verify reCAPTCHA if enabled
+if ($recaptchaSecret && $recaptchaSecret !== 'your_recaptcha_secret_key_here') {
+    if (empty($data['recaptchaToken'])) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'reCAPTCHA verification required']);
+        exit();
+    }
+
+    // Verify reCAPTCHA token with Google
+    $recaptchaUrl = 'https://www.google.com/recaptcha/api/siteverify';
+    $recaptchaData = [
+        'secret' => $recaptchaSecret,
+        'response' => $data['recaptchaToken'],
+        'remoteip' => $_SERVER['REMOTE_ADDR']
+    ];
+
+    $recaptchaOptions = [
+        'http' => [
+            'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method' => 'POST',
+            'content' => http_build_query($recaptchaData)
+        ]
+    ];
+
+    $recaptchaContext = stream_context_create($recaptchaOptions);
+    $recaptchaResult = file_get_contents($recaptchaUrl, false, $recaptchaContext);
+    $recaptchaJson = json_decode($recaptchaResult);
+
+    if (!$recaptchaJson->success) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'reCAPTCHA verification failed. Please try again.']);
+        exit();
+    }
+}
 
 // Validate required fields
 if (empty($data['name']) || empty($data['email']) || empty($data['message'])) {

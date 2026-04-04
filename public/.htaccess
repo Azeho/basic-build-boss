@@ -1,0 +1,38 @@
+# Enable correct MIME types for Vite/React app
+<IfModule mod_mime.c>
+  # JavaScript
+  AddType application/javascript .js
+  AddType application/javascript .mjs
+
+  # CSS
+  AddType text/css .css
+
+  # Images
+  AddType image/jpeg .jpg .jpeg
+  AddType image/png .png
+  AddType image/svg+xml .svg
+  AddType image/webp .webp
+
+  # Fonts
+  AddType font/woff2 .woff2
+  AddType font/woff .woff
+  AddType font/ttf .ttf
+  AddType font/otf .otf
+</IfModule>
+
+# Fallback for SPA routing
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Don't rewrite files that exist (including PHP files)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Don't rewrite index.html
+  RewriteRule ^index\.html$ - [L]
+
+  # Rewrite everything else to index.html for SPA routing
+  RewriteRule ^ index.html [L]
+</IfModule>
