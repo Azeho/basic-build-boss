@@ -11,9 +11,8 @@ import mitelLogo from "@/assets/mitel.jpg";
 /**
  * Contact Form
  *
- * Note: This form displays contact information and allows users to reach out
- * via direct email or phone. To enable form submission functionality,
- * you'll need to implement your own backend endpoint.
+ * This form submits to contact.php which sends emails to info@sungur-electronics.com
+ * Make sure your server has PHP mail() function configured properly.
  */
 
 const Contacts = () => {
@@ -25,28 +24,42 @@ const Contacts = () => {
   });
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setErrorMessage("");
 
-    // Create mailto link with form data
-    const subject = encodeURIComponent(`Contact Form: Message from ${formData.name}`);
-    const body = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\n\nMessage:\n${formData.message}`
-    );
-    const mailtoLink = `mailto:info@sungur-electronics.com?subject=${subject}&body=${body}`;
+    try {
+      const response = await fetch('/contact.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-    // Open default email client
-    window.location.href = mailtoLink;
+      const result = await response.json();
 
-    // Store email for confirmation dialog
-    setSubmittedEmail(formData.email);
+      if (result.success) {
+        // Store email for confirmation dialog
+        setSubmittedEmail(formData.email);
 
-    // Show success modal
-    setShowSuccessDialog(true);
+        // Show success modal
+        setShowSuccessDialog(true);
 
-    // Clear form
-    setFormData({ name: "", email: "", phone: "", message: "" });
+        // Clear form
+        setFormData({ name: "", email: "", phone: "", message: "" });
+      } else {
+        setErrorMessage(result.message || 'Failed to send message. Please try again.');
+      }
+    } catch (error) {
+      setErrorMessage('Failed to send message. Please try again or contact us directly at info@sungur-electronics.com');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [
@@ -151,13 +164,15 @@ const Contacts = () => {
                 />
               </div>
 
-              <Button type="submit" size="lg" className="w-full">
-                Send Message
-              </Button>
+              {errorMessage && (
+                <div className="p-4 bg-destructive/10 border border-destructive text-destructive rounded-md">
+                  {errorMessage}
+                </div>
+              )}
 
-              <p className="text-sm text-muted-foreground text-center">
-                This will open your default email client
-              </p>
+              <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+                {isSubmitting ? 'Sending...' : 'Send Message'}
+              </Button>
             </form>
           </div>
 
