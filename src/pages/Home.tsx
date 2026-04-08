@@ -84,9 +84,12 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       <section className="relative h-[600px] flex items-center overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroImage})` }}
+        <img
+          src={heroImage}
+          alt="Telecommunications Solutions"
+          className="absolute inset-0 w-full h-full object-cover"
+          fetchPriority="high"
+          loading="eager"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-foreground/90 to-foreground/40" />
         
@@ -155,6 +158,8 @@ const Home = () => {
                   src={service.image}
                   alt={service.title}
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <CardHeader>
@@ -221,6 +226,8 @@ const Home = () => {
                     className={`w-full object-contain grayscale hover:grayscale-0 transition-all ${
                       vendor.name === "Mitel" ? "h-24" : "h-20"
                     }`}
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               </div>
