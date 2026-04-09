@@ -43,10 +43,49 @@ export default defineConfig(({ mode }) => ({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          'vendor-ui': ['lucide-react', '@radix-ui/react-slot'],
-          'vendor-carousel': ['embla-carousel-react', 'embla-carousel-autoplay'],
+        manualChunks: (id) => {
+          // React core
+          if (id.includes('react') || id.includes('react-dom')) {
+            return 'vendor-react';
+          }
+          // React Router
+          if (id.includes('react-router')) {
+            return 'vendor-router';
+          }
+          // Radix UI components - split by category for better caching
+          if (id.includes('@radix-ui')) {
+            if (id.includes('dialog') || id.includes('popover') || id.includes('dropdown') || id.includes('menubar')) {
+              return 'vendor-radix-overlay';
+            }
+            if (id.includes('form') || id.includes('label') || id.includes('checkbox') || id.includes('radio')) {
+              return 'vendor-radix-form';
+            }
+            return 'vendor-radix-ui';
+          }
+          // Icons
+          if (id.includes('lucide-react')) {
+            return 'vendor-icons';
+          }
+          // Carousel
+          if (id.includes('embla-carousel')) {
+            return 'vendor-carousel';
+          }
+          // i18n
+          if (id.includes('i18next') || id.includes('react-i18next')) {
+            return 'vendor-i18n';
+          }
+          // React Query
+          if (id.includes('@tanstack/react-query')) {
+            return 'vendor-query';
+          }
+          // Form libraries
+          if (id.includes('react-hook-form') || id.includes('zod') || id.includes('@hookform')) {
+            return 'vendor-forms';
+          }
+          // Other vendor libs
+          if (id.includes('node_modules')) {
+            return 'vendor-misc';
+          }
         },
       },
     },
@@ -55,8 +94,17 @@ export default defineConfig(({ mode }) => ({
     terserOptions: {
       compress: {
         drop_console: mode === 'production',
-        pure_funcs: mode === 'production' ? ['console.log'] : [],
+        pure_funcs: mode === 'production' ? ['console.log', 'console.info', 'console.debug'] : [],
+        passes: 2,
+      },
+      format: {
+        comments: false,
       },
     },
+    chunkSizeWarningLimit: 1000,
+    reportCompressedSize: false,
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom'],
   },
 }));

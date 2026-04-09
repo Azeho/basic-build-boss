@@ -18,7 +18,7 @@ import cyberImg from "@/assets/cyber.png";
 import cctvImg from "@/assets/cctv.jpg";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import { useEffect } from "react";
+import { useEffect, memo, useMemo } from "react";
 
 const Home = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel(
@@ -26,7 +26,7 @@ const Home = () => {
     [Autoplay({ delay: 3000, stopOnInteraction: false })]
   );
 
-  const vendors = [
+  const vendors = useMemo(() => [
     { name: "Bosch", logo: boschLogo },
     { name: "Mitel", logo: mitelLogo },
     { name: "Panasonic", logo: panasonicLogo },
@@ -34,9 +34,9 @@ const Home = () => {
     { name: "HP", logo: hpLogo },
     { name: "Schneider Electric", logo: schneiderLogo },
     { name: "Siemens", logo: siemensLogo },
-  ];
+  ], []);
 
-  const services = [
+  const services = useMemo(() => [
     {
       icon: Phone,
       title: "Telephonization & PABX systems",
@@ -79,7 +79,7 @@ const Home = () => {
       color: "text-secondary",
       image: cctvImg,
     },
-  ];
+  ], []);
 
   return (
     <div className="min-h-screen">
@@ -262,4 +262,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default memo(Home);

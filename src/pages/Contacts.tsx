@@ -7,7 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Phone, Mail, MapPin, Clock, CheckCircle } from "lucide-react";
-import { useState, useRef } from "react";
+import { useState, useRef, memo, useCallback } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import mitelLogo from "@/assets/mitel.jpg";
 
@@ -465,4 +465,4 @@ const Contacts = () => {
   );
 };
 
-export default Contacts;
+export default memo(Contacts);

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin } from "lucide-react";
+import { memo } from "react";
 
 const Footer = () => {
   return (
@@ -77,4 +78,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default memo(Footer);

@@ -4,12 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- Performance optimizations -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
     <!-- Preconnect to external domains for faster loading -->
-    <link rel="preconnect" href="https://www.googletagmanager.com" />
-    <link rel="preconnect" href="https://www.google-analytics.com" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+    <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
     <link rel="dns-prefetch" href="https://translate.googleapis.com" />
     <link rel="dns-prefetch" href="https://translate.google.com" />
     <link rel="dns-prefetch" href="https://translate-pa.googleapis.com" />
+
+    <!-- Preload critical assets -->
+    <link rel="modulepreload" href="/src/main.tsx" />
 
     <!-- Google tag (gtag.js) - Deferred for performance -->
     <script>

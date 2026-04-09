@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Phone, Network, Video, Cog, Shield, Camera, Radio, Volume2, Wrench } from "lucide-react";
+import { memo } from "react";
 import pabxImg from "@/assets/pabx.jpg";
 import networkImg from "@/assets/network.jpg";
 import scadaImg from "@/assets/scada.jpg";
@@ -139,4 +140,4 @@ const Solutions = () => {
   );
 };
 
-export default Solutions;
+export default memo(Solutions);

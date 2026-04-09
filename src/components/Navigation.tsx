@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { Phone, Mail, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo, useCallback } from "react";
 import logoImage from "@/assets/sungur-logo.png";
 
 declare global {
@@ -16,7 +16,7 @@ const Navigation = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Custom language change handler for mobile
-  const handleMobileLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleMobileLanguageChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
     const langCode = e.target.value;
     if (!langCode) return;
 
@@ -43,7 +43,7 @@ const Navigation = () => {
 
     // Reload to apply translation
     window.location.reload();
-  };
+  }, []);
 
   useEffect(() => {
     // EXACT implementation from arassa-meydan.com
@@ -229,4 +229,4 @@ const Navigation = () => {
   );
 };
 
-export default Navigation;
+export default memo(Navigation);

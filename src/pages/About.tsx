@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Target, Users, Award, TrendingUp, CheckCircle, FileEdit, Settings, Wrench } from "lucide-react";
+import { memo } from "react";
 import aboutHeroImg from "@/assets/about-hero.jpg";
 
 const About = () => {
@@ -193,4 +194,4 @@ const About = () => {
   );
 };
 
-export default About;
+export default memo(About);

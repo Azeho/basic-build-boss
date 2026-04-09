@@ -1,4 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { memo } from "react";
 import hospitalityImg from "@/assets/sector-hospitality.jpg";
 import healthcareImg from "@/assets/sector-healthcare.jpg";
 import governmentImg from "@/assets/sector-government.jpg";
@@ -145,4 +146,4 @@ const Industries = () => {
   );
 };
 
-export default Industries;
+export default memo(Industries);
