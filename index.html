@@ -11,14 +11,20 @@
     <link rel="dns-prefetch" href="https://translate.google.com" />
     <link rel="dns-prefetch" href="https://translate-pa.googleapis.com" />
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EFB9S1X7ZW"></script>
+    <!-- Google tag (gtag.js) - Deferred for performance -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-EFB9S1X7ZW');
+
+      // Load GA after page load to reduce render blocking
+      window.addEventListener('load', function() {
+        var script = document.createElement('script');
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-EFB9S1X7ZW';
+        script.async = true;
+        document.head.appendChild(script);
+      });
     </script>
     <title>Sungur Electronics - Telecommunications Solutions in Turkmenistan</title>
     <meta name="description" content="Comprehensive telecommunications and IT solutions for business in Turkmenistan. Telephony, local networks, video surveillance, industrial automation." />

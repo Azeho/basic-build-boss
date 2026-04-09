@@ -88,6 +88,10 @@ const Industries = () => {
                   src={sector.image}
                   alt={sector.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  width="800"
+                  height="600"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4">

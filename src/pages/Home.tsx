@@ -88,6 +88,8 @@ const Home = () => {
           src={heroImage}
           alt="Telecommunications Solutions"
           className="absolute inset-0 w-full h-full object-cover"
+          width="1920"
+          height="600"
           fetchPriority="high"
           loading="eager"
         />
@@ -132,7 +134,7 @@ const Home = () => {
           <div className="mt-6">
             <Link to="/about">
               <Button variant="outline" size="lg">
-                Read more
+                Learn more about Sungur Electronics
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
@@ -158,6 +160,8 @@ const Home = () => {
                   src={service.image}
                   alt={service.title}
                   className="w-full h-full object-cover"
+                  width="640"
+                  height="400"
                   loading="lazy"
                   decoding="async"
                 />
@@ -226,6 +230,8 @@ const Home = () => {
                     className={`w-full object-contain grayscale hover:grayscale-0 transition-all ${
                       vendor.name === "Mitel" ? "h-24" : "h-20"
                     }`}
+                    width="200"
+                    height={vendor.name === "Mitel" ? "96" : "80"}
                     loading="lazy"
                     decoding="async"
                   />

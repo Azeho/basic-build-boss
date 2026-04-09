@@ -86,6 +86,10 @@ const About = () => {
               src={aboutHeroImg}
               alt="Sungur Electronics Team"
               className="rounded-lg shadow-xl w-full"
+              width="1200"
+              height="800"
+              loading="lazy"
+              decoding="async"
             />
           </div>
           <div>

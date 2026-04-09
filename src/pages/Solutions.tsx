@@ -97,6 +97,10 @@ const Solutions = () => {
                   src={solution.image}
                   alt={solution.title}
                   className="w-full h-full object-cover"
+                  width="640"
+                  height="400"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <CardHeader>
